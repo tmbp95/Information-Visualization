@@ -1,7 +1,27 @@
 
 var dataset, full_dataset;
+var dispatch = d3.dispatch("movieEnter", "movieOut");
+var selectedBar, selecterCircle;
 
+dispatch.on("movieEnter.bars", function(movie){
+  selectedBar = d3.select("rect[title=\'"+movie.title+"\'");
+  selectedBar.attr("fill","red");
+})
 
+dispatch.on("movieOut.bars", function(movie){
+  selectedBar = d3.select("rect[title=\'"+movie.title+"\'");
+  selectedBar.attr("fill","purple");
+})
+
+dispatch.on("movieEnter.scatterplot", function(movie){
+  selectedCircle = d3.select("circle[title=\'"+movie.title+"\'");
+  selectedCircle.attr("fill","red");
+})
+
+dispatch.on("movieOut.scatterplot", function(movie){
+  selectedCircle = d3.select("circle[title=\'"+movie.title+"\'");
+  selectedCircle.attr("fill","purple");
+})
 
 d3.json("oscar_winners.json", function (data) {
     full_dataset = data;    
@@ -58,6 +78,12 @@ function gen_bars() {
     svg.selectAll("rect")
     .data(dataset)
     .enter().append("rect")
+    .on("mouseover", function(d){
+      dispatch.call("movieEnter", d, d);
+    })
+    .on("mouseleave", function(d){
+      dispatch.call("movieOut", d, d);
+    })
     .attr("width",Math.floor((w-padding*2)/dataset.length)-1)
     .attr("height",function(d) {
                           return h-padding-hscale(d.rating);
@@ -132,7 +158,13 @@ function gen_scatterplot() {
        .attr("cy",function(d) {
                  return hscale(d.rating);
                  })
-       .attr("title", function(d) {return d.title;});
+       .attr("title", function(d) {return d.title;})
+       .on("mouseover", function(d){
+          dispatch.call("movieEnter", d, d);
+        })
+       .on("mouseleave", function(d){
+          dispatch.call("movieOut", d, d);
+        });
 	
 	 
     

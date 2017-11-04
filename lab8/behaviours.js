@@ -2,18 +2,45 @@ var margin = {top: -5, right: -5, bottom: -5, left: -5},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
+var zoom = d3.zoom()
+    .scaleExtent([1,10])
+    .on("zoom", zoomed);
+
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.right + ")")
-   ;
+    .call(zoom);
 
 var rect = svg.append("rect")
     .attr("width", width)
     .attr("height", height)
     .style("fill", "none")
     .style("pointer-events", "all");
+
+var drag = d3.drag()
+    .subject(function(d){return d;})
+    .on("start", dragstarted)
+    .on("drag", dragged)
+    .on("end", dragended)
+
+function zoomed(){
+  container.attr("transform", "translate(" + d3.event.transform.x + ',' + d3.event.transform.y + ")scale(" + d3.event.transform.k + ")");
+}
+
+function dragstarted(d){
+  d3.event.sourceEvent.stopPropagation();
+  d3.select(this).classedª("dragging", true);
+}
+
+function dragged(d){
+  d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+}
+
+function dragended(d){
+  d3.select(this).classed("dragging", false);
+}
 
 var container = svg.append("g");
 
@@ -46,7 +73,7 @@ d3.tsv("dots.tsv", dottype, function(error, dots) {
       .attr("r", 5)
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
-      //.call(drag);
+      .call(drag);
 });
 
 function dottype(d) {
