@@ -1,195 +1,202 @@
 <!DOCTYPE html>
 <html>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<head>
-	<title>CS GO STATS</title>
-	<link href="css/css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="css/style.css">
-	<script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
-</head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<body>
-	<div id="central">
-		<div id="template_esq">
-			<div class="col-lg-12" style="margin-top:150px;">
-			    <div class="input-group">
-			    	<input type="text" class="form-control" style="font-size:13px;" placeholder="Search Player or Team">
-			    	<span class="input-group-btn">
-			     		<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
-			    	</span>
+	<head>
+		<title>CS GO STATS</title>
+		<link href="css/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/style.css">
+		<script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+		<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+	</head>
+
+	<body>
+		<div id="central">
+			<div id="template_esq">
+				<div class="col-lg-12" style="margin-top:150px;">
+				    <div class="input-group">
+				    	<input type="text" class="form-control" style="font-size:13px;" placeholder="Search Player or Team">
+				    	<span class="input-group-btn">
+				     		<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+				    	</span>
+					</div>
+				</div>
+				<button type="button" class="btn btn-default" style="margin-left:15px; margin-top:5px; width:200px;">Tournaments</button>
+				<button type="button" class="btn btn-default" style="margin-left:15px; width:200px;">Maps</button>
+			</div>
+			<div id="template_dir">
+				<div id="template_dir_1"></div>
+				<div id="template_dir_2"></div>
+				<div id="paineldir">
+					<div id="paineldir_box1">
+						<br>
+						<input data-toggle="toggle" data-on="Teams" data-off="Players" type="checkbox">
+						<h4 style="margin-left:20px;">Top Players</h4>
+						<div id="the_chart"></div>
+						<table id="table1" class="table table-hover table-striped" style="width:340px;background-color:white;margin-top:10px;margin-left: 35px;border-radius:5px;">
+							<thead>
+								<tr>
+							    	<th>#</th>
+							    	<th>Player</th>
+							    	<th>Rate</th>
+						    	</tr>
+							</thead>
+							<tbody id="tbody1">
+								<!-- AUTO WRITE WITH JS -->
+							</tbody>
+						</table>
+					</div>
+					<div style="clear:both"></div>
+					<br><br>
 				</div>
 			</div>
-			<button type="button" class="btn btn-default" style="margin-left:15px; margin-top:5px; width:200px;">Tournaments</button>
-			<button type="button" class="btn btn-default" style="margin-left:15px; width:200px;">Maps</button>
 		</div>
-		<div id="template_dir">
-			<div id="template_dir_1"></div>
-			<div id="template_dir_2"></div>
-			<div id="paineldir">
-				<div style="margin-left: 50px;margin-top:30px;position:relative;float:left;">
-					<h4>Top Players</h4>
-					<div id="the_chart"></div>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>			
+		<script>
+		  $(function() {
+		    $('#toggle').bootstrapToggle({
+		      on: 'Teams',
+		      off: 'Players'
+		    });
+		  })
+		</script>
+		<script>
 
-					<table id="t1" class="table table-hover table-striped" style="width:200px;background-color:white;margin-top:10px;margin-left: 18px;">
-						<thead>
-							<tr>
-						    	<th>#</th>
-						    	<th>Player</th>
-					    	</tr>
-						</thead>
-						<tbody id="upa">
-							
-						</tbody>
-					</table>
-				</div>
-				<script src="http://d3js.org/d3.v3.min.js"></script>			
-<script>
+			function sortByProperty(objArray, prop, direction){
+			    const clone = objArray.slice(0);
+			    const direct = arguments.length>2 ? arguments[2] : 1; //Default to ascending
+			    const propPath = (prop.constructor===Array) ? prop : prop.split(".");
+			    clone.sort(function(a,b){
+			        for (let p in propPath){
+			                if (a[propPath[p]] && b[propPath[p]]){
+			                    a = a[propPath[p]];
+			                    b = b[propPath[p]];
+			                }
+			        }
+			        return ( (a < b) ? -1*direct : ((a > b) ? 1*direct : 0) );
+			    });
+			    return clone;
+			}
 
-function sortByProperty(objArray, prop, direction){
-    if (arguments.length<2) throw new Error("ARRAY, AND OBJECT PROPERTY MINIMUM ARGUMENTS, OPTIONAL DIRECTION");
-    if (!Array.isArray(objArray)) throw new Error("FIRST ARGUMENT NOT AN ARRAY");
-    const clone = objArray.slice(0);
-    const direct = arguments.length>2 ? arguments[2] : 1; //Default to ascending
-    const propPath = (prop.constructor===Array) ? prop : prop.split(".");
-    clone.sort(function(a,b){
-        for (let p in propPath){
-                if (a[propPath[p]] && b[propPath[p]]){
-                    a = a[propPath[p]];
-                    b = b[propPath[p]];
-                }
-        }
-        return ( (a < b) ? -1*direct : ((a > b) ? 1*direct : 0) );
-    });
-    return clone;
-}
+			function addRow(row0,row1,row2) {
+			    var table = document.getElementById("tbody1");
+			    var row = table.insertRow(-1);
+			    row.id = row1;
+			    $("#" + row1).mouseover(function(d) {
+					$("rect[Name=\'"+row1+"\'").css("fill", "#52a6af");
+			    });
+			    $("#" + row1).mouseleave(function(d) {
+			    	$("rect[Name=\'"+row1+"\'").css("fill", "#fb6b1d");
+				});
+			    var cell1 = row.insertCell(0);
+			    var cell2 = row.insertCell(1);
+			    var cell3 = row.insertCell(2);
+			    cell1.innerHTML = row0;
+			    cell2.innerHTML = row1;
+			    cell3.innerHTML = row2;
+			}
 
-// set the dimensions of the canvas
-var margin = {top: 20, right: 20, bottom: 20, left: 20},
-    width = 300 - margin.left - margin.right,
-    height = 200 - margin.top - margin.bottom;
+			// set the dimensions of the canvas
+			var margin = {top: 20, right: 20, bottom: 20, left: 50};
+		    var	width = 400 - margin.left - margin.right;
+		    var	height = 200 - margin.top - margin.bottom;
 
+		    var counter = 0;
 
-// set the ranges
-var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+			// set the ranges
+			var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.5);
+			var y = d3.scale.linear().range([height, 0]);
 
-var y = d3.scale.linear().range([height, 0]);
+			// define the axis
+			var xAxis = d3.svg.axis()
+			    .scale(x)
+			    .orient("bottom");
+			var yAxis = d3.svg.axis()
+			    .scale(y)
+			    .orient("left")
+			    .ticks(10);
 
-// define the axis
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom")
+			var tip = d3.tip()
+				.attr('class', 'd3-tip')
+				.offset([-10, 0])
+				.html(function(d) {
+					return "<strong>Rating:</strong> <span style='color:red'>" + d.Rating.toFixed(2) + "</span>";
+				})
 
+			// add the SVG element
+			var svg = d3.select("#the_chart").append("svg")
+		    		.attr("width", width + margin.left + margin.right)
+		    		.attr("height", height + margin.top + margin.bottom)
+		 		.append("g")
+		    		.attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left")
-    .ticks(10);
+		    svg.call(tip);
 
+			// load the data
+			d3.json("data/RatingAVGPlayers.json", function(error, data) {
+				// sort data and show the best 5
+				data = sortByProperty(data, 'attributes.Rating', -1).slice(0,5);
+			    data.forEach(function(d) {
+			    	counter++;
+			        d.Name = d.Name;
+			        d.Rating = +d.Rating;
+					addRow(counter,d.Name,d.Rating.toFixed(2));
+			    });
 
-// add the SVG element
-var svg = d3.select("#the_chart").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", 
-          "translate(" + margin.left + "," + margin.top + ")");
+				// scale the range of the data
+				x.domain(data.map(function(d) { return d.Name; }));
+				y.domain([0, d3.max(data, function(d) { return d.Rating; })]);
 
+				// Add bar chart
+				svg.selectAll("bar")
+				    	.data(data)
+					.enter().append("rect")
+					    .attr("class", "bar")
+					    .attr("x", function(d) { return x(d.Name); })
+					    .attr("width", x.rangeBand())
+					    .attr("y", function(d) { return y(d.Rating); })
+					    .attr("height", function(d) { return height - y(d.Rating); })
+					    .attr("Name", function(d) {return d.Name;})
+      					.on("mouseover", function(d){
+      						$("rect[Name=\'"+d.Name+"\'").css("fill", "#52a6af");
+      						$('#' + d.Name).data( 'prehovercolor', $('#' + d.Name).css('background-color'));
+					    	$('#' + d.Name).css("background-color", "#52a6af");
+					    	tip.show(d);
+					    })
+					    .on("mouseleave", function(d){
+					    	$("rect[Name=\'"+d.Name+"\'").css("fill", "#fb6b1d");
+					    	$('#' + d.Name).css("background-color", $('#' + d.Name).data('prehovercolor'));
+					    	tip.hide(d);
+					    });
+				// add axis
+				svg.append("g")
+				    	.attr("class", "x axis")
+				    	.attr("transform", "translate(0," + height + ")")
+				    	.call(xAxis)
+					.selectAll("text")
+						.style("text-anchor", "inherit")
+						.style("font-size", "12px")
+				    	.attr("dx", "5px")
+				    	.attr("dy", "18px")
+				    	.attr("transform", "rotate(-90)")
+				svg.append("g")
+			    		.attr("class", "y axis")
+			    		.call(yAxis)
+					.append("text")
+			    		.attr("transform", "rotate(-90)")
+			    		.attr("y", 5)
+			    		.attr("dy", "5px")
+			    		.style("text-anchor", "end")
+			    		.text("Rating");
+			});
 
-// load the data
-d3.json("js/data.json", function(error, data) {
-	data = sortByProperty(data, 'attributes.Freq', -1).slice(0,5);
-    data.forEach(function(d) {
-        d.Letter = d.Letter;
-        d.Freq = +d.Freq;
-		$('#upa tr').append("<td>test</td>");
-    });
-
-
-  // scale the range of the data
-  x.domain(data.map(function(d) { return d.Letter; }));
-  y.domain([0, d3.max(data, function(d) { return d.Freq; })]);
-
-  // add axis
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis)
-    .selectAll("text")
-      .style("text-anchor", "end")
-      .attr("dx", "3px")
-      .attr("dy", "8px")
-
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 5)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Frequency");
-
-
-  // Add bar chart
-  svg.selectAll("bar")
-      .data(data)
-    .enter().append("rect")
-      .attr("class", "bar")
-      .attr("x", function(d) { return x(d.Letter); })
-      .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.Freq); })
-      .attr("height", function(d) { return height - y(d.Freq); });
-
-});
-
-</script>
-				<div style="margin-left: 50px;margin-top:30px;position:relative;float:left;">
-					<h4>Top Teams</h4>
-					<table class="table table-hover table-striped" style="width:200px;background-color:white;margin-top:10px;margin-left:18px;">
-						<thead>
-							<tr>
-						    	<th>#</th>
-						    	<th>Teams</th>
-					    	</tr>
-						</thead>
-						<tbody>
-							<tr>
-					    		<td>1</td>
-					    		<td>Ola</td>
-					    	</tr>
-							<tr>
-					    		<td>2</td>
-					    		<td>Ola</td>
-					    	</tr>
-					    	<tr>
-					    		<td>3</td>
-					    		<td>Ola</td>
-					    	</tr>
-					    	<tr>
-					    		<td>4</td>
-					    		<td>Ola</td>
-					    	</tr>
-					    	<tr>
-					    		<td>5</td>
-					    		<td>Ola</td>
-					    	</tr>
-						</tbody>
-					</table>
-				</div>
-				<div style="clear:both"></div>
-				<br>
-			</div>
-		</div>
-	</div>
-
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="css/js/bootstrap.min.js"></script>
-
-
-
+		</script>
 	
 </body>
+
 </html>
