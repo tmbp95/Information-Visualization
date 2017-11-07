@@ -3,7 +3,7 @@ var dataset, full_dataset;
 d3.json("oscar_winners.json", function (data) {
     full_dataset = data;
     dataset	=	full_dataset.slice(0,35);
-    gen_vis2();
+    gen_vis();
 })
 
 function gen_vis() {

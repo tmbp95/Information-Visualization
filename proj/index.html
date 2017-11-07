@@ -34,21 +34,41 @@
 				<div id="paineldir">
 					<div id="paineldir_box1">
 						<br>
-						<input data-toggle="toggle" data-on="Teams" data-off="Players" type="checkbox">
-						<h4 style="margin-left:20px;">Top Players</h4>
-						<div id="the_chart"></div>
-						<table id="table1" class="table table-hover table-striped" style="width:340px;background-color:white;margin-top:10px;margin-left: 35px;border-radius:5px;">
-							<thead>
-								<tr>
-							    	<th>#</th>
-							    	<th>Player</th>
-							    	<th>Rate</th>
-						    	</tr>
-							</thead>
-							<tbody id="tbody1">
-								<!-- AUTO WRITE WITH JS -->
-							</tbody>
-						</table>
+						<div style="margin-left:20px;">
+							<input name="checkbox" data-toggle="toggle" data-on="Teams" data-off="Players" type="checkbox">
+						</div>
+						<div id="topPlayers"	>
+							<h4 style="margin-left:20px;">Top Players</h4>
+							<div id="the_chart"></div>
+							<table id="table1" class="table table-hover table-striped" style="width:340px;background-color:white;margin-top:10px;margin-left: 35px;border-radius:5px;">
+								<thead>
+									<tr>
+							    		<th>#</th>
+							    		<th>Player</th>
+							    		<th>Rate</th>
+						    		</tr>
+								</thead>
+								<tbody id="tbody1">
+									<!-- AUTO WRITE WITH JS -->
+								</tbody>
+							</table>
+						</div>
+						<div id="topTeams" style="display:none;">
+							<h4 style="margin-left:20px;">Top Teams</h4>
+							<div id="the_chart"></div>
+							<table id="table1" class="table table-hover table-striped" style="width:340px;background-color:white;margin-top:10px;margin-left: 35px;border-radius:5px;">
+								<thead>
+									<tr>
+							    		<th>#</th>
+							    		<th>Teamr</th>
+							    		<th>Rate</th>
+						    		</tr>
+								</thead>
+								<tbody id="tbody1">
+									<!-- AUTO WRITE WITH JS -->
+								</tbody>
+							</table>
+						</div>
 					</div>
 					<div style="clear:both"></div>
 					<br><br>
@@ -58,12 +78,18 @@
 		<script src="http://d3js.org/d3.v3.min.js"></script>
 		<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>			
 		<script>
-		  $(function() {
-		    $('#toggle').bootstrapToggle({
-		      on: 'Teams',
-		      off: 'Players'
+			$(function(){
+		      $('[name="checkbox"]').change(function(){
+		        if ($(this).is(':checked')) {
+		           $('#topPlayers').hide();
+		           $('#topTeams').show();
+		        }else{
+		           $('#topPlayers').show();
+		           $('#topTeams').hide();
+		        }
+		      });
 		    });
-		  })
+
 		</script>
 		<script>
 
@@ -101,6 +127,7 @@
 			    cell3.innerHTML = row2;
 			}
 
+			function barchart(){
 			// set the dimensions of the canvas
 			var margin = {top: 20, right: 20, bottom: 20, left: 50};
 		    var	width = 400 - margin.left - margin.right;
@@ -194,7 +221,8 @@
 			    		.style("text-anchor", "end")
 			    		.text("Rating");
 			});
-
+	}
+	barchart();
 		</script>
 	
 </body>
