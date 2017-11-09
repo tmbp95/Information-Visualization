@@ -37,7 +37,7 @@
 						<div style="margin-left:20px;">
 							<input name="checkbox" data-toggle="toggle" data-on="Teams" data-off="Players" type="checkbox">
 						</div>
-						<div id="topPlayers"	>
+						<div id="topPlayers">
 							<h4 style="margin-left:20px;">Top Players</h4>
 							<div id="the_chart"></div>
 							<table id="table1" class="table table-hover table-striped" style="width:340px;background-color:white;margin-top:10px;margin-left: 35px;border-radius:5px;">
@@ -55,16 +55,16 @@
 						</div>
 						<div id="topTeams" style="display:none;">
 							<h4 style="margin-left:20px;">Top Teams</h4>
-							<div id="the_chart"></div>
-							<table id="table1" class="table table-hover table-striped" style="width:340px;background-color:white;margin-top:10px;margin-left: 35px;border-radius:5px;">
+							<div id="the_chart2"></div>
+							<table id="table2" class="table table-hover table-striped" style="width:340px;background-color:white;margin-top:10px;margin-left: 35px;border-radius:5px;">
 								<thead>
 									<tr>
 							    		<th>#</th>
-							    		<th>Teamr</th>
+							    		<th>Team</th>
 							    		<th>Rate</th>
 						    		</tr>
 								</thead>
-								<tbody id="tbody1">
+								<tbody id="tbody2">
 									<!-- AUTO WRITE WITH JS -->
 								</tbody>
 							</table>
@@ -123,106 +123,225 @@
 			    var cell2 = row.insertCell(1);
 			    var cell3 = row.insertCell(2);
 			    cell1.innerHTML = row0;
-			    cell2.innerHTML = row1;
+			    cell2.innerHTML = "<a class='rowtext' href='#'>" + row1 + "</a>";
+			    cell3.innerHTML = row2;
+			}
+
+			function addRow2(row0,row1,row2) {
+			    var table = document.getElementById("tbody2");
+			    var row = table.insertRow(-1);
+			    row.id = row1;
+			    $("#" + row1).mouseover(function(d) {
+					$("rect[Name=\'"+row1+"\'").css("fill", "#52a6af");
+			    });
+			    $("#" + row1).mouseleave(function(d) {
+			    	$("rect[Name=\'"+row1+"\'").css("fill", "#fb6b1d");
+				});
+			    var cell1 = row.insertCell(0);
+			    var cell2 = row.insertCell(1);
+			    var cell3 = row.insertCell(2);
+			    cell1.innerHTML = row0;
+			    cell2.innerHTML = "<a class='rowtext' href='#'>" + row1 + "</a>";
 			    cell3.innerHTML = row2;
 			}
 
 			function barchart(){
-			// set the dimensions of the canvas
-			var margin = {top: 20, right: 20, bottom: 20, left: 50};
-		    var	width = 400 - margin.left - margin.right;
-		    var	height = 200 - margin.top - margin.bottom;
+				// set the dimensions of the canvas
+				var margin = {top: 20, right: 20, bottom: 20, left: 50};
+			    var	width = 400 - margin.left - margin.right;
+			    var	height = 200 - margin.top - margin.bottom;
 
-		    var counter = 0;
+			    var counter = 0;
 
-			// set the ranges
-			var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.5);
-			var y = d3.scale.linear().range([height, 0]);
+				// set the ranges
+				var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.5);
+				var y = d3.scale.linear().range([height, 0]);
 
-			// define the axis
-			var xAxis = d3.svg.axis()
-			    .scale(x)
-			    .orient("bottom");
-			var yAxis = d3.svg.axis()
-			    .scale(y)
-			    .orient("left")
-			    .ticks(10);
+				// define the axis
+				var xAxis = d3.svg.axis()
+				    .scale(x)
+				    .orient("bottom");
+				var yAxis = d3.svg.axis()
+				    .scale(y)
+				    .orient("left")
+				    .ticks(10);
 
-			var tip = d3.tip()
-				.attr('class', 'd3-tip')
-				.offset([-10, 0])
-				.html(function(d) {
-					return "<strong>Rating:</strong> <span style='color:red'>" + d.Rating.toFixed(2) + "</span>";
-				})
+				var tip = d3.tip()
+					.attr('class', 'd3-tip')
+					.offset([-10, 0])
+					.html(function(d) {
+						return "<strong>Rating:</strong> <span style='color:red'>" + d.Rating.toFixed(2) + "</span>";
+					})
 
-			// add the SVG element
-			var svg = d3.select("#the_chart").append("svg")
-		    		.attr("width", width + margin.left + margin.right)
-		    		.attr("height", height + margin.top + margin.bottom)
-		 		.append("g")
-		    		.attr("transform","translate(" + margin.left + "," + margin.top + ")");
+				// add the SVG element
+				var svg = d3.select("#the_chart").append("svg")
+			    		.attr("width", width + margin.left + margin.right)
+			    		.attr("height", height + margin.top + margin.bottom)
+			 		.append("g")
+			    		.attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
-		    svg.call(tip);
+			    svg.call(tip);
 
-			// load the data
-			d3.json("data/RatingAVGPlayers.json", function(error, data) {
-				// sort data and show the best 5
-				data = sortByProperty(data, 'attributes.Rating', -1).slice(0,5);
-			    data.forEach(function(d) {
-			    	counter++;
-			        d.Name = d.Name;
-			        d.Rating = +d.Rating;
-					addRow(counter,d.Name,d.Rating.toFixed(2));
-			    });
+				// load the data
+				d3.json("data/RatingAVGPlayers.json", function(error, data) {
+					// sort data and show the best 5
+					data = sortByProperty(data, 'attributes.Rating', -1).slice(0,5);
+				    data.forEach(function(d) {
+				    	counter++;
+				        d.Name = d.Name;
+				        d.Rating = +d.Rating;
+						addRow(counter,d.Name,d.Rating.toFixed(2));
+				    });
 
-				// scale the range of the data
-				x.domain(data.map(function(d) { return d.Name; }));
-				y.domain([0, d3.max(data, function(d) { return d.Rating; })]);
+					// scale the range of the data
+					x.domain(data.map(function(d) { return d.Name; }));
+					y.domain([0, d3.max(data, function(d) { return d.Rating; })]);
 
-				// Add bar chart
-				svg.selectAll("bar")
-				    	.data(data)
-					.enter().append("rect")
-					    .attr("class", "bar")
-					    .attr("x", function(d) { return x(d.Name); })
-					    .attr("width", x.rangeBand())
-					    .attr("y", function(d) { return y(d.Rating); })
-					    .attr("height", function(d) { return height - y(d.Rating); })
-					    .attr("Name", function(d) {return d.Name;})
-      					.on("mouseover", function(d){
-      						$("rect[Name=\'"+d.Name+"\'").css("fill", "#52a6af");
-      						$('#' + d.Name).data( 'prehovercolor', $('#' + d.Name).css('background-color'));
-					    	$('#' + d.Name).css("background-color", "#52a6af");
-					    	tip.show(d);
-					    })
-					    .on("mouseleave", function(d){
-					    	$("rect[Name=\'"+d.Name+"\'").css("fill", "#fb6b1d");
-					    	$('#' + d.Name).css("background-color", $('#' + d.Name).data('prehovercolor'));
-					    	tip.hide(d);
-					    });
-				// add axis
-				svg.append("g")
-				    	.attr("class", "x axis")
-				    	.attr("transform", "translate(0," + height + ")")
-				    	.call(xAxis)
-					.selectAll("text")
-						.style("text-anchor", "inherit")
-						.style("font-size", "12px")
-				    	.attr("dx", "5px")
-				    	.attr("dy", "18px")
-				    	.attr("transform", "rotate(-90)")
-				svg.append("g")
-			    		.attr("class", "y axis")
-			    		.call(yAxis)
-					.append("text")
-			    		.attr("transform", "rotate(-90)")
-			    		.attr("y", 5)
-			    		.attr("dy", "5px")
-			    		.style("text-anchor", "end")
-			    		.text("Rating");
-			});
-	}
-	barchart();
+					// Add bar chart
+					svg.selectAll("bar")
+					    	.data(data)
+						.enter().append("rect")
+						    .attr("class", "bar")
+						    .attr("x", function(d) { return x(d.Name); })
+						    .attr("width", x.rangeBand())
+						    .attr("y", function(d) { return y(d.Rating); })
+						    .attr("height", function(d) { return height - y(d.Rating); })
+						    .attr("Name", function(d) {return d.Name;})
+	      					.on("mouseover", function(d){
+	      						$("rect[Name=\'"+d.Name+"\'").css("fill", "#52a6af");
+	      						$('#' + d.Name).data( 'prehovercolor', $('#' + d.Name).css('background-color'));
+						    	$('#' + d.Name).css("background-color", "#52a6af");
+						    	tip.show(d);
+						    })
+						    .on("mouseleave", function(d){
+						    	$("rect[Name=\'"+d.Name+"\'").css("fill", "#fb6b1d");
+						    	$('#' + d.Name).css("background-color", $('#' + d.Name).data('prehovercolor'));
+						    	tip.hide(d);
+						    });
+					// add axis
+					svg.append("g")
+					    	.attr("class", "x axis")
+					    	.attr("transform", "translate(0," + height + ")")
+					    	.call(xAxis)
+						.selectAll("text")
+							.style("text-anchor", "inherit")
+							.style("font-size", "12px")
+					    	.attr("dx", "5px")
+					    	.attr("dy", "18px")
+					    	.attr("transform", "rotate(-90)")
+					    	.style("cursor", "pointer")
+					    	.on("click", function(d) { window.location.replace("http://google.com/"+d); });
+					svg.append("g")
+				    		.attr("class", "y axis")
+				    		.call(yAxis)
+						.append("text")
+				    		.attr("transform", "rotate(-90)")
+				    		.attr("y", 5)
+				    		.attr("dy", "5px")
+				    		.style("text-anchor", "end")
+				    		.text("Rating");
+				});
+			}
+
+			function barchart2(){
+				// set the dimensions of the canvas
+				var margin = {top: 20, right: 20, bottom: 20, left: 50};
+			    var	width = 400 - margin.left - margin.right;
+			    var	height = 200 - margin.top - margin.bottom;
+
+			    var counter = 0;
+
+				// set the ranges
+				var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.5);
+				var y = d3.scale.linear().range([height, 0]);
+
+				// define the axis
+				var xAxis = d3.svg.axis()
+				    .scale(x)
+				    .orient("bottom");
+				var yAxis = d3.svg.axis()
+				    .scale(y)
+				    .orient("left")
+				    .ticks(10);
+
+				var tip = d3.tip()
+					.attr('class', 'd3-tip')
+					.offset([-10, 0])
+					.html(function(d) {
+						return "<strong>Rating:</strong> <span style='color:red'>" + d.Rating.toFixed(2) + "</span>";
+					})
+
+				// add the SVG element
+				var svg = d3.select("#the_chart2").append("svg")
+			    		.attr("width", width + margin.left + margin.right)
+			    		.attr("height", height + margin.top + margin.bottom)
+			 		.append("g")
+			    		.attr("transform","translate(" + margin.left + "," + margin.top + ")");
+
+			    svg.call(tip);
+
+				// load the data
+				d3.json("data/RatingAVGPlayers.json", function(error, data) {
+					// sort data and show the best 5
+					data = sortByProperty(data, 'attributes.Rating', -1).slice(0,5);
+				    data.forEach(function(d) {
+				    	counter++;
+				        d.Name = d.Name;
+				        d.Rating = +d.Rating;
+						addRow2(counter,d.Name,d.Rating.toFixed(2));
+				    });
+
+					// scale the range of the data
+					x.domain(data.map(function(d) { return d.Name; }));
+					y.domain([0, d3.max(data, function(d) { return d.Rating; })]);
+
+					// Add bar chart
+					svg.selectAll("bar")
+					    	.data(data)
+						.enter().append("rect")
+						    .attr("class", "bar")
+						    .attr("x", function(d) { return x(d.Name); })
+						    .attr("width", x.rangeBand())
+						    .attr("y", function(d) { return y(d.Rating); })
+						    .attr("height", function(d) { return height - y(d.Rating); })
+						    .attr("Name", function(d) {return d.Name;})
+	      					.on("mouseover", function(d){
+	      						$("rect[Name=\'"+d.Name+"\'").css("fill", "#52a6af");
+	      						$('#' + d.Name).data( 'prehovercolor', $('#' + d.Name).css('background-color'));
+						    	$('#' + d.Name).css("background-color", "#52a6af");
+						    	tip.show(d);
+						    })
+						    .on("mouseleave", function(d){
+						    	$("rect[Name=\'"+d.Name+"\'").css("fill", "#fb6b1d");
+						    	$('#' + d.Name).css("background-color", $('#' + d.Name).data('prehovercolor'));
+						    	tip.hide(d);
+						    });
+					// add axis
+					svg.append("g")
+					    	.attr("class", "x axis")
+					    	.attr("transform", "translate(0," + height + ")")
+					    	.call(xAxis)
+						.selectAll("text")
+							.style("text-anchor", "inherit")
+							.style("font-size", "12px")
+					    	.attr("dx", "5px")
+					    	.attr("dy", "18px")
+					    	.attr("transform", "rotate(-90)")
+					    	.style("cursor", "pointer")
+					    	.on("click", function(d) { window.location.replace("http://google.com/"+d); });
+					svg.append("g")
+				    		.attr("class", "y axis")
+				    		.call(yAxis)
+						.append("text")
+				    		.attr("transform", "rotate(-90)")
+				    		.attr("y", 5)
+				    		.attr("dy", "5px")
+				    		.style("text-anchor", "end")
+				    		.text("Rating");
+				});
+			}
+			barchart();
+			barchart2();
 		</script>
 	
 </body>

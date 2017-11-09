@@ -6,10 +6,17 @@ body{
 
 .table-hover tbody tr:hover td, 
 .table-hover tbody tr:hover th {
-  background-color: #52a6af;
+	background-color: #52a6af;
 }
 
+.table-hover tbody tr:hover td a{
+	color:white;
+}
 
+a.rowtext{
+	cursor:pointer;
+	color:#52a6af;
+}
 .bar{
 	fill: #fb6b1d;
 }
