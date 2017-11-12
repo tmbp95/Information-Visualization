@@ -8,76 +8,77 @@
 		<title>CS GO STATS</title>
 		<link href="css/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/style.css">
-		<script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
-		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-		<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-		<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/d3v4.js"></script>
+		<link href="css/css/bootstrap-toggle.min.css" rel="stylesheet">
+		<script src="css/js/bootstrap-toggle.min.js"></script>
+  		<script src="js/jquery-ui.js"></script>
+		<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
 	</head>
 
 	<body>
 		<div id="central">
-			<div id="template_esq">
-				<div class="col-lg-12" style="margin-top:150px;">
-				    <div class="input-group">
-				    	<input type="text" class="form-control" style="font-size:13px;" placeholder="Search Player or Team">
-				    	<span class="input-group-btn">
-				     		<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
-				    	</span>
-					</div>
-				</div>
-				<button type="button" class="btn btn-default" style="margin-left:15px; margin-top:5px; width:200px;">Tournaments</button>
-				<button type="button" class="btn btn-default" style="margin-left:15px; width:200px;">Maps</button>
-			</div>
+			<div id="template_esq"></div>
 			<div id="template_dir">
 				<div id="template_dir_1"></div>
 				<div id="template_dir_2"></div>
 				<div id="paineldir">
 					<div id="paineldir_box1">
 						<br>
-						<div style="margin-left:20px;">
+						<!--<div style="margin-left:20px;">
 							<input name="checkbox" data-toggle="toggle" data-on="Teams" data-off="Players" type="checkbox">
-						</div>
+						</div>-->
 						<div id="topPlayers">
-							<h4 style="margin-left:20px;">Top Players</h4>
-							<div id="the_chart"></div>
-							<table id="table1" class="table table-hover table-striped" style="width:340px;background-color:white;margin-top:10px;margin-left: 35px;border-radius:5px;">
-								<thead>
-									<tr>
-							    		<th>#</th>
-							    		<th>Player</th>
-							    		<th>Rate</th>
-						    		</tr>
-								</thead>
-								<tbody id="tbody1">
-									<!-- AUTO WRITE WITH JS -->
-								</tbody>
-							</table>
+							<h4 style="margin-left:20px;margin-top:-4px;">Tournaments By Year</h4>
+							<div id="scatterplot"></div>
+							<div style="float:left;width:500px;height:20px;margin-left:10px;margin-top:10px;">
+								<span style="float:left;margin-top:2px;" class="month-name">Less</span>
+								<div id="sampleColor" style="background: #eeeeee;"></div>
+								<div id="sampleColor" style="background: #71e7f4"></div>
+								<div id="sampleColor" style="background: #52a6af;"></div>
+								<div id="sampleColor" style="background: #41848b;"></div>
+								<div id="sampleColor" style="background: #2c6167;"></div>
+								<span style="margin-left:2px;" class="month-name">More</span>
+								<div class="input-group" style="margin-left:150px;margin-top:-23px;">
+							    	<input type="search" class="form-control" placeholder="Search for a Tournament" id="autocomplete" style="height:25px;font-size:12px;">
+							    	<span class="input-group-btn">
+							    		<button class="btn btn-default" type="button" style="height:25px;"><span class="glyphicon glyphicon-search" aria-hidden="true" style="position:relative;top:-3px;"></span></button>
+							    	</span>
+							    </div><!-- /input-group -->
+							</div>
+							<div id="calendar"></div>
 						</div>
-						<div id="topTeams" style="display:none;">
-							<h4 style="margin-left:20px;">Top Teams</h4>
-							<div id="the_chart2"></div>
-							<table id="table2" class="table table-hover table-striped" style="width:340px;background-color:white;margin-top:10px;margin-left: 35px;border-radius:5px;">
-								<thead>
-									<tr>
-							    		<th>#</th>
-							    		<th>Team</th>
-							    		<th>Rate</th>
-						    		</tr>
-								</thead>
-								<tbody id="tbody2">
-									<!-- AUTO WRITE WITH JS -->
-								</tbody>
-							</table>
-						</div>
+						
+				
 					</div>
+					
 					<div style="clear:both"></div>
 					<br><br>
 				</div>
 			</div>
 		</div>
-		<script src="http://d3js.org/d3.v3.min.js"></script>
-		<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>			
+		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+		<script src="js/heatmap.js"></script>
+		<script src="js/d3-tip.js"></script>
+		<script src="js/scatterplot.js"></script>
 		<script>
+				var availableEvents = [];
+				d3.json("data/AllEventsNames.json", function(data){
+                   data.forEach(function(d) {
+          				availableEvents.push(d.Name);
+      				});
+					$('#autocomplete').autocomplete({
+						lookup: availableEvents,
+						onSelect: function (suggestion) {
+							updateSearchBar(suggestion);
+						}
+					});
+			    });
+			    $(document).ready(function() {
+					$('#autocomplete').val("");
+			    });
+		</script>
+		<script>/*
 			$(function(){
 		      $('[name="checkbox"]').change(function(){
 		        if ($(this).is(':checked')) {
@@ -88,7 +89,7 @@
 		           $('#topTeams').hide();
 		        }
 		      });
-		    });
+		    });*/
 
 		</script>
 		<script>
@@ -170,7 +171,7 @@
 					.attr('class', 'd3-tip')
 					.offset([-10, 0])
 					.html(function(d) {
-						return "<strong>Rating:</strong> <span style='color:red'>" + d.Rating.toFixed(2) + "</span>";
+						return "<strong>Rating:</strong> <span style='color:red'>" + d.Rating.toFixed(2) + "</span><br>"	;
 					})
 
 				// add the SVG element
@@ -340,8 +341,6 @@
 				    		.text("Rating");
 				});
 			}
-			barchart();
-			barchart2();
 		</script>
 	
 </body>

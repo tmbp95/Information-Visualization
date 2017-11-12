@@ -13,6 +13,19 @@ body{
 	color:white;
 }
 
+path.line {
+	fill: none;
+	stroke: #52a6af;
+	stroke-width: 3px;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: slategray;
+	shape-rendering: crispEdges;
+}
+
 a.rowtext{
 	cursor:pointer;
 	color:#52a6af;
@@ -104,9 +117,91 @@ a.rowtext{
 #paineldir_box1{
 	border-top:1px #cecece solid;
 	border-right:1px #cecece solid;
-	background:url(../img/bg_box1.png) repeat;
+	background:#fdfdfd;
 	margin-left:50px;
 	margin-top:30px;
 	position:relative;
 	float:left;
 }
+#scatterplot{
+	margin-left:10px;
+	margin-bottom: 10px;
+	position:relative;
+	float:left;
+	border-right:1px dotted grey;
+	border-radius:0px;
+}
+
+div.tooltip {
+  margin-left:2px;
+  position: absolute;
+  text-align: left;
+  width: 75px;
+  min-height: 30px;
+  height: auto;
+  padding: 4px;
+  font: 12px sans-serif;
+  background: #1f1f1f;
+  color:white;
+  border: 0px;
+  border-radius:5px;
+  pointer-events: none;
+}
+
+div.tooltip2 { 
+  margin-left:2px;
+  margin-top:-35px;
+  position: absolute;
+  text-align: left;
+  min-width: 180px;
+  min-height: 60px;
+  height:auto;
+  max-width:380px;
+  padding: 4px;
+  font: 12px sans-serif;
+  background: #1f1f1f;
+  color:white;
+  border: 0px;
+  border-radius:5px;
+}
+
+#calendar {
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-right: 40px;
+  position:relative;
+  float:left;
+}
+.month {
+  margin-right: 0px;
+}
+.month2 {
+  margin-right: -16px;
+}
+.month-name {
+  font-size: 85%;
+  fill: #777;
+  font-family: Arial, Helvetica;
+}
+.day:hover {
+  stroke: #6d6E70;
+  stroke-width: 2;
+}
+.day:focus {
+  stroke: #ffff33;
+  stroke-width: 2;
+}
+
+#sampleColor{
+	float:left;
+	width:14px;
+	height:14px;
+	border:1px solid #eeeeee;
+	margin-top:3px;
+	margin-left:2px;
+}
+
+.autocomplete-suggestions { border: 1px solid #999; background: #fff; cursor: default; overflow: auto; height:100px;border-bottom-left-radius: 5px;}
+.autocomplete-suggestion { padding: 2px 2px; font-size: 12px; white-space: nowrap; overflow: hidden;}
+.autocomplete-selected { background: #f0f0f0;}
+.autocomplete-suggestions strong { font-weight: bold; color: #3399ff;}
