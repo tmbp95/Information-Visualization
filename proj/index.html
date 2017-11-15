@@ -47,13 +47,20 @@
 							    </div><!-- /input-group -->
 							</div>
 							<div id="calendar"></div>
-						</div>
-						
-				
+						</div>	
+						<div style="clear:both"></div>
+						<div id="divInfoHeatmap">
+							<span id="InfoHeatmap"></span>
+						</div>	
 					</div>
-					
-					<div style="clear:both"></div>
-					<br><br>
+					<div id="paineldir_box1">
+						<br>
+						<div id="topPlayers">
+							<h4 style="margin-left:20px;margin-top:-4px;">Teams in <font id="tournamentsfont"></font></h4>
+							<div id="bubblechart"></div>
+						</div>
+					</div>
+					<br>
 				</div>
 			</div>
 		</div>
@@ -61,6 +68,7 @@
 		<script src="js/heatmap.js"></script>
 		<script src="js/d3-tip.js"></script>
 		<script src="js/scatterplot.js"></script>
+		<script src="js/bubblechart.js"></script>
 		<script>
 				var availableEvents = [];
 				d3.json("data/AllEventsNames.json", function(data){

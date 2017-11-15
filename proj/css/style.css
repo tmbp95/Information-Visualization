@@ -118,10 +118,9 @@ a.rowtext{
 	border-top:1px #cecece solid;
 	border-right:1px #cecece solid;
 	background:#fdfdfd;
-	margin-left:50px;
+	margin-left:30px;
 	margin-top:30px;
-	position:relative;
-	float:left;
+	width:1140px;
 }
 #scatterplot{
 	margin-left:10px;
@@ -205,3 +204,18 @@ div.tooltip2 {
 .autocomplete-suggestion { padding: 2px 2px; font-size: 12px; white-space: nowrap; overflow: hidden;}
 .autocomplete-selected { background: #f0f0f0;}
 .autocomplete-suggestions strong { font-weight: bold; color: #3399ff;}
+
+
+#divInfoHeatmap{
+	width:200px;
+	height: 35px;
+	margin-left: 325px;
+	margin-top:-40px;
+	display: none;
+	height:auto;
+	color:#777;
+}
+
+#InfoHeatmap{
+	font-size:13px;
+}

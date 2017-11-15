@@ -1,6 +1,6 @@
 var year = 0;
 var dispatch2 = d3.dispatch("squareClick");
-var selectedSquare;
+var selectedSquare, selectedMonth;
 var clickedDot = null;
 
 dispatch2.on("squareClick.heatmap", function(data){
@@ -28,6 +28,11 @@ dispatch2.on("squareClick.heatmap", function(data){
                     .attr("stroke-width", 4);
   }
 })
+
+function teste(data){
+  alert("ola");
+  $("#tournamentsfont").html(data);
+}
 
 function drawCalendar(dateData){
 
@@ -71,6 +76,9 @@ function drawCalendar(dateData){
       }else if(d.getFullYear()==2017){
         return "month2";
       }
+    })
+    .attr("title", function(d){
+      return d;
     })
     .attr("height", ((cellSize * 7) + (cellMargin * 8) + 20) ) // the 20 is for the month labels
     .attr("width", function(d) {
@@ -148,6 +156,17 @@ function drawCalendar(dateData){
     })
     .on("click", function(d) {
       dispatch2.call("squareClick", d, d);
+      var lookupEventsByIDResult = lookupEventsByID[d];
+        var lookupEventsByIDResultString = ""
+if(lookupEventsByIDResult==null){
+          lookupEventsByIDResultString = "empty";
+        }else{
+          lookupEventsByIDResult.forEach(function(d) {
+               lookupEventsByIDResultString = lookupEventsByIDResultString + "&nbsp&nbsp- <button id='" + d + "' onclick='teste(" + d.toString() + ")' style='font-size:12px;'>" + d + "</button><br>"; 
+          });
+        }
+      $("#divInfoHeatmap").show();
+      $("#InfoHeatmap").html("Date: " + d+"<br>Tournaments:<br>"+lookupEventsByIDResultString+"<br>");
       /*div.transition()
                .duration(200)
                .style("display", "block");
@@ -194,6 +213,7 @@ function updateData(year) {
 
 window.onload = d3.json("data/Events2014.json", function(response){
                   drawCalendar(response);
+                   $("#divInfoHeatmap").hide();
                 });
 /*
 $("body").click(function(e){
