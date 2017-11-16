@@ -110,7 +110,19 @@ function drawCalendar(dateData){
       NameByDate = leaves[0].NameByDate;
       NameByDateParts = NameByDate.split("@");
       return NameByDateParts;
-    })
+    })    
+    .object(dateData);
+
+  var lookupEventsByIDandName = d3.nest()
+    .key(function(d) { return d.DATE; })
+    .rollup(function(leaves) {
+      IDByDate = leaves[0].IDByDate;
+      NameByDate = leaves[0].NameByDate;
+      IDByDateParts = IDByDate.split("@");
+      NameByDateParts = NameByDate.split("@");
+      concatString = IDByDateParts.concat(NameByDateParts);
+      return concatString;
+    })    
     .object(dateData);
 
   var rect = svg.selectAll("rect.day")
@@ -156,17 +168,22 @@ function drawCalendar(dateData){
     })
     .on("click", function(d) {
       dispatch2.call("squareClick", d, d);
-      var lookupEventsByIDResult = lookupEventsByID[d];
-        var lookupEventsByIDResultString = ""
-if(lookupEventsByIDResult==null){
-          lookupEventsByIDResultString = "empty";
+      var lookupEventsByIDandNameResult = lookupEventsByIDandName[d];
+      
+        var lookupEventsByIDandNameResultString = "";
+if(lookupEventsByIDandNameResult==null){
+          lookupEventsByIDandNameResultString = "empty";
         }else{
-          lookupEventsByIDResult.forEach(function(d) {
-               lookupEventsByIDResultString = lookupEventsByIDResultString + "&nbsp&nbsp- <button id='" + d + "' onclick='teste(" + d.toString() + ")' style='font-size:12px;'>" + d + "</button><br>"; 
+          console.log(lookupEventsByIDandNameResult);
+          lengthList = lookupEventsByIDandNameResult.length;
+          EventsID = lookupEventsByIDandNameResult[0,lengthList/2-1];
+          EventsNAME = lookupEventsByIDandNameResult[lengthList/2-1,lengthList-1];
+          EventsNAME.forEach(function(d) { 
+            lookupEventsByIDandNameResultString = lookupEventsByIDandNameResultString + "&nbsp&nbsp- <a href='#' onclick='" + teste(EventsID[])+ "' style='font-size:12px;'>" + d + "</a><br>"; 
           });
         }
       $("#divInfoHeatmap").show();
-      $("#InfoHeatmap").html("Date: " + d+"<br>Tournaments:<br>"+lookupEventsByIDResultString+"<br>");
+      $("#InfoHeatmap").html("Date: " + d+"<br>Tournaments:<br>"+lookupEventsByIDandNameResultString+"<br>");
       /*div.transition()
                .duration(200)
                .style("display", "block");
