@@ -18,10 +18,7 @@
 
 	<body>
 		<div id="central">
-			<div id="template_esq"></div>
 			<div id="template_dir">
-				<div id="template_dir_1"></div>
-				<div id="template_dir_2"></div>
 				<div id="paineldir">
 					<div id="paineldir_box1">
 						<br>
@@ -40,7 +37,7 @@
 								<div id="sampleColor" style="background: #2c6167;"></div>
 								<span style="margin-left:2px;" class="month-name">More</span>
 								<div class="input-group" style="margin-left:150px;margin-top:-23px;">
-							    	<input type="search" class="form-control" placeholder="Search for a Tournament" id="autocomplete" style="height:25px;font-size:12px;">
+							    	<input type="search" class="form-control autocompleteTournaments" placeholder="Search for a Tournament" id="autocomplete" style="height:25px;font-size:12px;">
 							    	<span class="input-group-btn">
 							    		<button class="btn btn-default" type="button" style="height:25px;"><span class="glyphicon glyphicon-search" aria-hidden="true" style="position:relative;top:-3px;"></span></button>
 							    	</span>
@@ -53,12 +50,38 @@
 							<span id="InfoHeatmap"></span>
 						</div>	
 					</div>
-					<div id="paineldir_box1">
+					<div id="paineldir_box1" class="bubblechartBOX" style="display:none;margin-top:5px;">
 						<br>
 						<div id="topPlayers">
 							<h4 style="margin-left:20px;margin-top:-4px;">Teams in <font id="tournamentsfont"></font></h4>
+							<div class="input-group" style="margin-left:20px;margin-top:2px;width:180px;">
+							    <input type="search" class="form-control autocompleteTeams" placeholder="Search for a Team" id="autocomplete" style="height:25px;font-size:12px;width:180px;">
+							    <span class="input-group-btn">
+							    	<button class="btn btn-default" type="button" style="height:25px;"><span class="glyphicon glyphicon-search" aria-hidden="true" style="position:relative;top:-3px;"></span></button>
+							    </span>
+							</div><!-- /input-group -->
 							<div id="bubblechart"></div>
+							<div id="radarchart"></div>
+							<div id="barchart"></div>
 						</div>
+						<div style="clear:both"></div>
+					</div>
+					<div id="paineldir_box1" class="barcharttBOX" style="display:none;margin-top:5px;">
+						<br>
+						<div id="topPlayers">
+							<h4 style="margin-left:20px;margin-top:-4px;float:left;">Players in <font id="teamsfont"></font></h4>
+							<div class="input-group" style="margin-right:20px;margin-top:-5px;width:180px;float:right;">
+							    <input type="search" class="form-control autocompletePlayers" placeholder="Search for a Player" id="autocomplete" style="height:25px;font-size:12px;width:180px;">
+							    <span class="input-group-btn">
+							    	<button class="btn btn-default" type="button" style="height:25px;"><span class="glyphicon glyphicon-search" aria-hidden="true" style="position:relative;top:-3px;"></span></button>
+							    </span>
+							</div><!-- /input-group -->
+							<div style="clear:both"></div>
+							<div id="horizbarchart"></div>
+							<div id="radarchartPlayers"></div>
+							<div id="linechart"></div>
+						</div>
+						<div style="clear:both"></div>
 					</div>
 					<br>
 				</div>
@@ -69,288 +92,73 @@
 		<script src="js/d3-tip.js"></script>
 		<script src="js/scatterplot.js"></script>
 		<script src="js/bubblechart.js"></script>
+		<script src="js/radarchart.js"></script>
+		<script src="js/barchart.js"></script>
+		<script src="js/horizbarchart.js"></script>
+		<script src="js/radarchartPlayers.js"></script>
+		<script src="js/linechart.js"></script>
 		<script>
 				var availableEvents = [];
 				d3.json("data/AllEventsNames.json", function(data){
                    data.forEach(function(d) {
           				availableEvents.push(d.Name);
       				});
-					$('#autocomplete').autocomplete({
+					$('.autocompleteTournaments').autocomplete({
 						lookup: availableEvents,
+						onSelect: function (suggestion) {
+							updateSearchBar(suggestion,data);
+						}
+					});
+					function updateSearchBar(suggestion,data) {
+				    	data.forEach(function(d) {
+          					if(suggestion.value == d.Name){
+          						begin=false;
+          						enterOutside=true;
+          						clickedDot=2000+d.YEAR;
+          						gen_scatterplot(clickedDot);
+          						updateData(clickedDot,d.ID);
+          						$("#ESTE").css("fill", "#ccc");        						
+          						teste(d.ID,d.Name);
+          					}
+      					});
+					}
+			    });
+			    $(document).ready(function() {
+					$('.autocompleteTournaments').val("");
+			    });
+
+			    var availableTeams = [];
+				d3.json("data/AllEventsNames.json", function(data){
+                   data.forEach(function(d) {
+          				availableTeams.push(d.Name);
+      				});
+					$('.autocompleteTeams').autocomplete({
+						lookup: availableTeams,
 						onSelect: function (suggestion) {
 							updateSearchBar(suggestion);
 						}
 					});
 			    });
 			    $(document).ready(function() {
-					$('#autocomplete').val("");
+					$('.autocompleteTeams').val("");
+			    });
+
+			    var availablePlayers = [];
+				d3.json("data/AllEventsNames.json", function(data){
+                   data.forEach(function(d) {
+          				availablePlayers.push(d.Name);
+      				});
+					$('.autocompletePlayers').autocomplete({
+						lookup: availablePlayers,
+						onSelect: function (suggestion) {
+							updateSearchBar(suggestion);
+						}
+					});
+			    });
+			    $(document).ready(function() {
+					$('.autocompletePlayers').val("");
 			    });
 		</script>
-		<script>/*
-			$(function(){
-		      $('[name="checkbox"]').change(function(){
-		        if ($(this).is(':checked')) {
-		           $('#topPlayers').hide();
-		           $('#topTeams').show();
-		        }else{
-		           $('#topPlayers').show();
-		           $('#topTeams').hide();
-		        }
-		      });
-		    });*/
-
-		</script>
-		<script>
-
-			function sortByProperty(objArray, prop, direction){
-			    const clone = objArray.slice(0);
-			    const direct = arguments.length>2 ? arguments[2] : 1; //Default to ascending
-			    const propPath = (prop.constructor===Array) ? prop : prop.split(".");
-			    clone.sort(function(a,b){
-			        for (let p in propPath){
-			                if (a[propPath[p]] && b[propPath[p]]){
-			                    a = a[propPath[p]];
-			                    b = b[propPath[p]];
-			                }
-			        }
-			        return ( (a < b) ? -1*direct : ((a > b) ? 1*direct : 0) );
-			    });
-			    return clone;
-			}
-
-			function addRow(row0,row1,row2) {
-			    var table = document.getElementById("tbody1");
-			    var row = table.insertRow(-1);
-			    row.id = row1;
-			    $("#" + row1).mouseover(function(d) {
-					$("rect[Name=\'"+row1+"\'").css("fill", "#52a6af");
-			    });
-			    $("#" + row1).mouseleave(function(d) {
-			    	$("rect[Name=\'"+row1+"\'").css("fill", "#fb6b1d");
-				});
-			    var cell1 = row.insertCell(0);
-			    var cell2 = row.insertCell(1);
-			    var cell3 = row.insertCell(2);
-			    cell1.innerHTML = row0;
-			    cell2.innerHTML = "<a class='rowtext' href='#'>" + row1 + "</a>";
-			    cell3.innerHTML = row2;
-			}
-
-			function addRow2(row0,row1,row2) {
-			    var table = document.getElementById("tbody2");
-			    var row = table.insertRow(-1);
-			    row.id = row1;
-			    $("#" + row1).mouseover(function(d) {
-					$("rect[Name=\'"+row1+"\'").css("fill", "#52a6af");
-			    });
-			    $("#" + row1).mouseleave(function(d) {
-			    	$("rect[Name=\'"+row1+"\'").css("fill", "#fb6b1d");
-				});
-			    var cell1 = row.insertCell(0);
-			    var cell2 = row.insertCell(1);
-			    var cell3 = row.insertCell(2);
-			    cell1.innerHTML = row0;
-			    cell2.innerHTML = "<a class='rowtext' href='#'>" + row1 + "</a>";
-			    cell3.innerHTML = row2;
-			}
-
-			function barchart(){
-				// set the dimensions of the canvas
-				var margin = {top: 20, right: 20, bottom: 20, left: 50};
-			    var	width = 400 - margin.left - margin.right;
-			    var	height = 200 - margin.top - margin.bottom;
-
-			    var counter = 0;
-
-				// set the ranges
-				var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.5);
-				var y = d3.scale.linear().range([height, 0]);
-
-				// define the axis
-				var xAxis = d3.svg.axis()
-				    .scale(x)
-				    .orient("bottom");
-				var yAxis = d3.svg.axis()
-				    .scale(y)
-				    .orient("left")
-				    .ticks(10);
-
-				var tip = d3.tip()
-					.attr('class', 'd3-tip')
-					.offset([-10, 0])
-					.html(function(d) {
-						return "<strong>Rating:</strong> <span style='color:red'>" + d.Rating.toFixed(2) + "</span><br>"	;
-					})
-
-				// add the SVG element
-				var svg = d3.select("#the_chart").append("svg")
-			    		.attr("width", width + margin.left + margin.right)
-			    		.attr("height", height + margin.top + margin.bottom)
-			 		.append("g")
-			    		.attr("transform","translate(" + margin.left + "," + margin.top + ")");
-
-			    svg.call(tip);
-
-				// load the data
-				d3.json("data/RatingAVGPlayers.json", function(error, data) {
-					// sort data and show the best 5
-					data = sortByProperty(data, 'attributes.Rating', -1).slice(0,5);
-				    data.forEach(function(d) {
-				    	counter++;
-				        d.Name = d.Name;
-				        d.Rating = +d.Rating;
-						addRow(counter,d.Name,d.Rating.toFixed(2));
-				    });
-
-					// scale the range of the data
-					x.domain(data.map(function(d) { return d.Name; }));
-					y.domain([0, d3.max(data, function(d) { return d.Rating; })]);
-
-					// Add bar chart
-					svg.selectAll("bar")
-					    	.data(data)
-						.enter().append("rect")
-						    .attr("class", "bar")
-						    .attr("x", function(d) { return x(d.Name); })
-						    .attr("width", x.rangeBand())
-						    .attr("y", function(d) { return y(d.Rating); })
-						    .attr("height", function(d) { return height - y(d.Rating); })
-						    .attr("Name", function(d) {return d.Name;})
-	      					.on("mouseover", function(d){
-	      						$("rect[Name=\'"+d.Name+"\'").css("fill", "#52a6af");
-	      						$('#' + d.Name).data( 'prehovercolor', $('#' + d.Name).css('background-color'));
-						    	$('#' + d.Name).css("background-color", "#52a6af");
-						    	tip.show(d);
-						    })
-						    .on("mouseleave", function(d){
-						    	$("rect[Name=\'"+d.Name+"\'").css("fill", "#fb6b1d");
-						    	$('#' + d.Name).css("background-color", $('#' + d.Name).data('prehovercolor'));
-						    	tip.hide(d);
-						    });
-					// add axis
-					svg.append("g")
-					    	.attr("class", "x axis")
-					    	.attr("transform", "translate(0," + height + ")")
-					    	.call(xAxis)
-						.selectAll("text")
-							.style("text-anchor", "inherit")
-							.style("font-size", "12px")
-					    	.attr("dx", "5px")
-					    	.attr("dy", "18px")
-					    	.attr("transform", "rotate(-90)")
-					    	.style("cursor", "pointer")
-					    	.on("click", function(d) { window.location.replace("http://google.com/"+d); });
-					svg.append("g")
-				    		.attr("class", "y axis")
-				    		.call(yAxis)
-						.append("text")
-				    		.attr("transform", "rotate(-90)")
-				    		.attr("y", 5)
-				    		.attr("dy", "5px")
-				    		.style("text-anchor", "end")
-				    		.text("Rating");
-				});
-			}
-
-			function barchart2(){
-				// set the dimensions of the canvas
-				var margin = {top: 20, right: 20, bottom: 20, left: 50};
-			    var	width = 400 - margin.left - margin.right;
-			    var	height = 200 - margin.top - margin.bottom;
-
-			    var counter = 0;
-
-				// set the ranges
-				var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.5);
-				var y = d3.scale.linear().range([height, 0]);
-
-				// define the axis
-				var xAxis = d3.svg.axis()
-				    .scale(x)
-				    .orient("bottom");
-				var yAxis = d3.svg.axis()
-				    .scale(y)
-				    .orient("left")
-				    .ticks(10);
-
-				var tip = d3.tip()
-					.attr('class', 'd3-tip')
-					.offset([-10, 0])
-					.html(function(d) {
-						return "<strong>Rating:</strong> <span style='color:red'>" + d.Rating.toFixed(2) + "</span>";
-					})
-
-				// add the SVG element
-				var svg = d3.select("#the_chart2").append("svg")
-			    		.attr("width", width + margin.left + margin.right)
-			    		.attr("height", height + margin.top + margin.bottom)
-			 		.append("g")
-			    		.attr("transform","translate(" + margin.left + "," + margin.top + ")");
-
-			    svg.call(tip);
-
-				// load the data
-				d3.json("data/RatingAVGPlayers.json", function(error, data) {
-					// sort data and show the best 5
-					data = sortByProperty(data, 'attributes.Rating', -1).slice(0,5);
-				    data.forEach(function(d) {
-				    	counter++;
-				        d.Name = d.Name;
-				        d.Rating = +d.Rating;
-						addRow2(counter,d.Name,d.Rating.toFixed(2));
-				    });
-
-					// scale the range of the data
-					x.domain(data.map(function(d) { return d.Name; }));
-					y.domain([0, d3.max(data, function(d) { return d.Rating; })]);
-
-					// Add bar chart
-					svg.selectAll("bar")
-					    	.data(data)
-						.enter().append("rect")
-						    .attr("class", "bar")
-						    .attr("x", function(d) { return x(d.Name); })
-						    .attr("width", x.rangeBand())
-						    .attr("y", function(d) { return y(d.Rating); })
-						    .attr("height", function(d) { return height - y(d.Rating); })
-						    .attr("Name", function(d) {return d.Name;})
-	      					.on("mouseover", function(d){
-	      						$("rect[Name=\'"+d.Name+"\'").css("fill", "#52a6af");
-	      						$('#' + d.Name).data( 'prehovercolor', $('#' + d.Name).css('background-color'));
-						    	$('#' + d.Name).css("background-color", "#52a6af");
-						    	tip.show(d);
-						    })
-						    .on("mouseleave", function(d){
-						    	$("rect[Name=\'"+d.Name+"\'").css("fill", "#fb6b1d");
-						    	$('#' + d.Name).css("background-color", $('#' + d.Name).data('prehovercolor'));
-						    	tip.hide(d);
-						    });
-					// add axis
-					svg.append("g")
-					    	.attr("class", "x axis")
-					    	.attr("transform", "translate(0," + height + ")")
-					    	.call(xAxis)
-						.selectAll("text")
-							.style("text-anchor", "inherit")
-							.style("font-size", "12px")
-					    	.attr("dx", "5px")
-					    	.attr("dy", "18px")
-					    	.attr("transform", "rotate(-90)")
-					    	.style("cursor", "pointer")
-					    	.on("click", function(d) { window.location.replace("http://google.com/"+d); });
-					svg.append("g")
-				    		.attr("class", "y axis")
-				    		.call(yAxis)
-						.append("text")
-				    		.attr("transform", "rotate(-90)")
-				    		.attr("y", 5)
-				    		.attr("dy", "5px")
-				    		.style("text-anchor", "end")
-				    		.text("Rating");
-				});
-			}
-		</script>
-	
 </body>
 
 </html>

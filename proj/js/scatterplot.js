@@ -1,7 +1,8 @@
-var dispatch = d3.dispatch("dotEnter", "dotOut", "dotClick", "squareClick");
+var dispatch = d3.dispatch("dotEnter", "dotOut", "dotClick", "squareClick", "recEnter", "recOut");
 var selectedDot;
 var clickedDot = null;
 var begin = true;
+var enterOutside = false;
 
 dispatch.on("dotEnter.scatterplot", function(data){
   selectedDot = d3.select("circle[title=\'"+data.YEAR+"\'");
@@ -73,7 +74,11 @@ dispatch.on("dotClick.scatterplot", function(data){
   }
 })
   
-function gen_scatterplot() {
+function gen_scatterplot(startYear) {
+  d3.select("#scatterplot").selectAll("svg").remove();
+  if(startYear==null){
+    startYear=2014;
+  }
   // Set the dimensions of the canvas / graph
   var margin = {top: 30, right: 30, bottom: 40, left: 55},
       width = 300 - margin.left - margin.right,
@@ -131,14 +136,14 @@ function gen_scatterplot() {
           .data(data)
         .enter().append("circle")
           .attr("r", function(d){
-            if(d.YEAR==2014 && begin == true){
+            if(d.YEAR==startYear && (begin == true || (begin==false && enterOutside==true))){
               return 6;
             }else{
               return 3;
             }
           })
           .attr("fill", function(d){
-            if(d.YEAR==2014 && begin == true){
+            if(d.YEAR==startYear && (begin == true || (begin==false && enterOutside==true))){
               return "red";
             }else{
               return "black";

@@ -1,86 +1,75 @@
-var dispatch = d3.dispatch("dotEnter", "dotOut", "dotClick", "squareClick");
-var selectedDot;
-var clickedDot = null;
+var dispatch4 = d3.dispatch("BallClick");
+var selectedBall;
+var BallClick = 0;
+var clickedBall;
 var begin = true;
+var idTournament, nameTournament;
+var show = 0;
+var colorBall;
 
-dispatch.on("dotEnter.scatterplot", function(data){
-  selectedDot = d3.select("circle[title=\'"+data.YEAR+"\'");
-  if(selectedDot.attr("title") == 2014 && begin == true){
-    return;
+dispatch4.on("BallClick.bubblechart", function(data){
+  if(BallClick==0){
+    gen_horizbarchart(data.NAME);
+    $(".barcharttBOX").slideDown(300);
+  }else{
+    $(".barcharttBOX").slideUp(300);
+    d3.select("#horizbarchart").selectAll("svg").remove();
+    gen_horizbarchart(data.NAME);
+    $(".barcharttBOX").slideDown(300);
   }
-  if(clickedDot == null || selectedDot.attr("title") != clickedDot){
-    selectedDot.transition() // <------- TRANSITION STARTS HERE --------
-               .delay(0) 
-               .duration(200)
-               .attr("fill","orange")
-               .attr("r", 4);
-  }  
-})
-
-dispatch.on("dotOut.scatterplot", function(data){
-  selectedDot = d3.select("circle[title=\'"+data.YEAR+"\'");
-  if(selectedDot.attr("title") == 2014 && begin == true){
-    return;
-  }
-  if(clickedDot == null || selectedDot.attr("title") != clickedDot){
-    selectedDot.transition() // <------- TRANSITION STARTS HERE --------
-               .delay(0) 
-               .duration(200)
-               .attr("fill","black")
-               .attr("r", 3);
-  }  
-})
-
-dispatch.on("dotClick.scatterplot", function(data){
-  if(selectedDot.attr("title") == 2014 && begin == true){
-    return;
-  }else if(selectedDot.attr("title") != 2014 && begin == true){
+  BallClick = 1;
+  if(clickedBall == null){
     begin = false;
-    clickedDot = 2014;
-    selectedDot = d3.select("circle[title=\'"+clickedDot+"\'");
-    selectedDot.transition();
-    selectedDot.transition() // <------- TRANSITION STARTS HERE --------
-               .delay(0) 
-               .duration(200)
-               .attr("fill","black")
-               .attr("r", 3);
-    clickedDot = data.YEAR;
-  }
-  if(clickedDot == null){
-    begin = false;
-    clickedDot = data.YEAR;
-    selectedDot = d3.select("circle[title=\'"+data.YEAR+"\'");
-    selectedDot.transition() // <------- TRANSITION STARTS HERE --------
+    clickedBall = data.NAME;
+    selectedBall = d3.select("circle[title=\'"+data.NAME+"\'");
+    colorBall = selectedBall.attr("fill");
+    selectedBall.transition() // <------- TRANSITION STARTS HERE --------
                 .delay(0) 
                 .duration(200)
                 .attr("fill","red")
-                .attr("r", 6);
   }else{
-    selectedDot = d3.select("circle[title=\'"+clickedDot+"\'");
-    selectedDot.transition();
-    selectedDot.transition() // <------- TRANSITION STARTS HERE --------
+    selectedBall = d3.select("circle[title=\'"+clickedBall+"\'");
+    selectedBall.transition();
+    selectedBall.transition() // <------- TRANSITION STARTS HERE --------
                .delay(0) 
                .duration(200)
-               .attr("fill","black")
-               .attr("r", 3);
-    clickedDot = data.YEAR;
-    selectedDot = d3.select("circle[title=\'"+data.YEAR+"\'");
-    selectedDot.transition() // <------- TRANSITION STARTS HERE --------
+               .attr("fill",colorBall)
+    clickedBall = data.NAME;
+    selectedBall = d3.select("circle[title=\'"+data.NAME+"\'");
+    colorBall = selectedBall.attr("fill");
+    selectedBall.transition() // <------- TRANSITION STARTS HERE --------
                .delay(0) 
                .duration(200)
                .attr("fill","red")
-               .attr("r", 6);
   }
 })
+
+function teste(data, data2){
+  idTournament = data;
+  nameTournament = data2;
+  $("#tournamentsfont").html(nameTournament);
+  if(show==0){
+    gen_bubblechart(nameTournament);
+    $(".bubblechartBOX").slideDown(300);
+  }else{
+    $(".barcharttBOX").slideUp(300);
+    $(".bubblechartBOX").slideUp(300);
+    d3.select("#bubblechart").selectAll("svg").remove();
+    gen_bubblechart(nameTournament);
+    $(".bubblechartBOX").slideDown(300);
+  }
+}
   
-function gen_scatterplot() {
+function gen_bubblechart(ola) {
+  show = 1;
   // Set the dimensions of the canvas / graph
   var margin = {top: 30, right: 30, bottom: 40, left: 55},
-      width = 300 - margin.left - margin.right,
+      width = 600 - margin.left - margin.right,
       height = 200 - margin.top - margin.bottom;
 
   // Set the ranges
-  var x = d3.scaleLinear().range([0, width]);
+  var x = d3.scaleBand().range([0, width])
+                        .padding(1);
   var y = d3.scaleLinear().range([height, 0]);  
 
   var div = d3.select("body").append("div")
@@ -96,78 +85,77 @@ function gen_scatterplot() {
           .attr("transform", 
                 "translate(" + margin.left + "," + margin.top + ")");
 
-  // Define the line
-  var valueline = d3.line()
-      .x(function(d) { return x(d.YEAR); })
-      .y(function(d) { return y(d.NumEvents); });
+  var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
 
   // Get the data
-  d3.json("data/EventsPerYear.json", function(error, data) {
+  d3.json("data/teste.json", function(error, data) {
       data.forEach(function(d) {
-          d.YEAR = d.YEAR;
-          d.NumEvents = +d.NumEvents;
+          d.NAME = d.NAME;
+          d.Rating = +d.Rating;
+          d.Prize = d.Prize;
       });
 
-      // Scale the range of the data
-      x.domain([data[0].YEAR-0.2,data[data.length-1].YEAR]);
-      y.domain([0, d3.max(data, function(d) { return d.NumEvents; })+100]);
+      x.domain(data.map(function(d) { return d.NAME; }));
+      y.domain([0, d3.max(data, function(d) { return d.Rating; })+1]);
 
       var yAxis = d3.axisLeft()
                     .ticks(4)
                     .scale(y);                  
 
       var xAxis = d3.axisBottom()
-                .ticks(4)
-                .tickFormat(d3.format("d"))
                 .scale(x);
     
       // Add the scatterplot
       svg.selectAll("circle")
           .data(data)
         .enter().append("circle")
-          .attr("r", function(d){
-            if(d.YEAR==2014 && begin == true){
-              return 6;
+          .attr("r", function(d) { 
+            if(d.Prize==0){ 
+              return 2;
+            }else if(d.Prize>=1600){
+              return d.Prize/800+2
             }else{
-              return 3;
+              return d.Prize/200+2
             }
+
           })
           .attr("fill", function(d){
-            if(d.YEAR==2014 && begin == true){
-              return "red";
+            if(d.Ranking==1){
+              return "orange";
+            }else if(d.Ranking==2){
+              return "green";
+            }else if(d.Ranking==3){
+              return "blue";
             }else{
-              return "black";
+              return "black;"
             }
           }) 
+          .attr("stroke","black")
+          .attr("stroke-width", 1)
           .attr("cursor","pointer")
-          .attr("cx", function(d) { return x(d.YEAR); })
-          .attr("cy", function(d) { return y(d.NumEvents); })
-          .attr("title", function(d) {return d.YEAR;})
+          .attr("class","bubblechartBall")
+          .attr("cx", function(d) { return x(d.NAME); })
+          .attr("cy", function(d) { return y(d.Rating); })
+          .attr("title", function(d) {return d.NAME;})
+          .on("click", function(d) {
+            dispatch4.call("BallClick", d, d);
+          })
           .on("mouseover", function(d){
-            dispatch.call("dotEnter", d, d);
-            div.transition()
-               .duration(200)
-               .style("opacity", .9);
-            div.html("<strong>Year:</strong> <span style='color:red'>" + d.YEAR + "</span><br>" + 
-                      "<strong>Qty:</strong> <span style='color:red'>" + d.NumEvents + "</span>")
-               .style("left", (d3.event.pageX) + "px")
-               .style("top", (d3.event.pageY - 42) + "px");
-          })
-          .on("mouseleave", function(d){
-            dispatch.call("dotOut", d, d);
-            div.transition()
-               .duration(500)
-               .style("opacity", 0);
-          })
-          .on("click", function(d){ 
-            dispatch.call("dotClick", d, d);
-            if(d.YEAR == 2014 && begin == true){}else{
-              if(year != d.YEAR ){
-                year = d.YEAR; 
-                updateData(year);
-              }
-            }
-          });
+        div.transition()
+            .duration(200)
+            .style("opacity", .9);
+        div.html("<strong>Team:</strong> <span style='color:red'>" + d.NAME + "</span><br>" + 
+                 "<strong>Rating:</strong> <span style='color:red'>" + d.Rating + "</span>")
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 52) + "px");
+      })
+      .on("mouseleave", function(d){
+        div.transition()
+           .duration(500)
+           .style("opacity", 0);
+      });
 
       // Add the X Axis
       svg.append("g")
@@ -178,8 +166,7 @@ function gen_scatterplot() {
       svg.append("text")             
       .attr("transform", "translate(" + (width/2) + " ," + (height + margin.top + 5) + ")")
       .style("text-anchor", "middle")
-      .style("font-size", "13px")
-      .text("Year"); 
+      .text("Teams"); 
 
       // Add the Y Axis
       svg.append("g")
@@ -192,10 +179,8 @@ function gen_scatterplot() {
       .attr("x",0 - (height / 2))
       .attr("dy", "20px")
       .style("text-anchor", "middle")
-      .style("font-size", "13px")
-      .text("Rating");      
+      .text(function(d){ return "Rating"});      
 
 
   });
 }
-gen_scatterplot();

@@ -1,11 +1,12 @@
 var year = 0;
 var dispatch2 = d3.dispatch("squareClick");
 var selectedSquare, selectedMonth;
-var clickedDot = null;
+var clickedSquare = null;
+var id = null;
 
 dispatch2.on("squareClick.heatmap", function(data){
-  if(clickedDot == null){
-    clickedDot = data;
+  if(clickedSquare == null){
+    clickedSquare = data;
     selectedSquare = d3.select("rect[title=\'"+data+"\'")
                      .transition() // <------- TRANSITION STARTS HERE --------
                      .delay(0) 
@@ -13,14 +14,14 @@ dispatch2.on("squareClick.heatmap", function(data){
                      .attr("stroke","#ffcc00")
                      .attr("stroke-width", 4);
   }else{
-    selectedSquare = d3.select("rect[title=\'"+clickedDot+"\'")
+    selectedSquare = d3.select("rect[title=\'"+clickedSquare+"\'")
                      .transition() // <------- TRANSITION STARTS HERE --------
                      .delay(0) 
                      .duration(200)
                      .attr("stroke","#eeeeee")
                      .attr("stroke-width", 1);
-    clickedDot = data;
-    selectedDot = d3.select("rect[title=\'"+clickedDot+"\'")
+    clickedSquare = data;
+    selectedDot = d3.select("rect[title=\'"+clickedSquare+"\'")
                     .transition() // <------- TRANSITION STARTS HERE --------
                     .delay(0) 
                     .duration(200)
@@ -29,12 +30,13 @@ dispatch2.on("squareClick.heatmap", function(data){
   }
 })
 
-function teste(data){
-  alert("ola");
-  $("#tournamentsfont").html(data);
-}
-
-function drawCalendar(dateData){
+function drawCalendar(dateData,id){
+  if(id==null){
+    console.log(id);
+    id=0;
+  }else{
+    console.log(id);
+  }
 
   var weeksInMonth = function(month){
     var m = d3.timeMonth.floor(month)
@@ -50,7 +52,7 @@ function drawCalendar(dateData){
   var maxDate = d3.max(dateData, function(d) { return new Date(d.DATE) })
 
   var cellMargin = 2,
-      cellSize = 13;
+      cellSize = 13.5;
 
   var day = d3.timeFormat("%w"),
       week = d3.timeFormat("%U"),
@@ -66,15 +68,23 @@ function drawCalendar(dateData){
       if(d.getFullYear()==2014){
       	return "month2";
       }else if(d.getFullYear()==2015){
-        if(monthName(d)=="January" || monthName(d)=="February"){
+        if(monthName(d)=="January" || monthName(d)=="February" || monthName(d)=="October"){
           return "month";
         }else{
           return "month2";
         }
       }else if(d.getFullYear()==2016){
-        return "month2";
+        if(monthName(d)=="April"){
+          return "month";
+        }else{
+          return "month2";
+        }
       }else if(d.getFullYear()==2017){
-        return "month2";
+        if(monthName(d)=="September"){
+          return "month";
+        }else{
+          return "month2";
+        }
       }
     })
     .attr("title", function(d){
@@ -125,6 +135,15 @@ function drawCalendar(dateData){
     })    
     .object(dateData);
 
+  var lookupEventsIDgiven = d3.nest()
+    .key(function(d) { return d.DATE; })
+    .rollup(function(leaves) {
+      IDByDate = leaves[0].IDByDate;
+      IDByDateParts = IDByDate.split("@");
+      return IDByDateParts;
+    })    
+    .object(dateData);
+
   var rect = svg.selectAll("rect.day")
     .data(function(d, i) { return d3.timeDays(d, new Date(d.getFullYear(), d.getMonth()+1, 1)); })
     .enter().append("rect")
@@ -133,9 +152,45 @@ function drawCalendar(dateData){
     .attr("width", cellSize)
     .attr("height", cellSize)
     .attr("rx", 1).attr("ry", 1) // rounded corners
-    .attr("fill", '#eeeeee') // default light grey fill
     .attr("y", function(d) { return (day(d) * cellSize) + (day(d) * cellMargin) + cellMargin; })
     .attr("x", function(d) { return ((week(d) - week(new Date(d.getFullYear(),d.getMonth(),1))) * cellSize) + ((week(d) - week(new Date(d.getFullYear(),d.getMonth(),1))) * cellMargin) + cellMargin ; })
+    .attr("fill", "#eeeeee")
+    .attr("id", function(d){
+      var lookupEventsByIDResult = lookupEventsIDgiven[((d.getDate() < 10 ? '0' : '') + d.getDate()) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + d.getFullYear()];
+      if(lookupEventsByIDResult!=null){
+        for(i=0;i<lookupEventsByIDResult.length;i++){
+          if(lookupEventsByIDResult[i]==id){
+            return "ESTE";
+          }else{
+            return "NOT";
+          }
+        }
+      }
+    })
+    .attr("stroke-width", function(d){
+      var lookupEventsByIDResult = lookupEventsIDgiven[((d.getDate() < 10 ? '0' : '') + d.getDate()) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + d.getFullYear()];
+      if(lookupEventsByIDResult!=null){
+        for(i=0;i<lookupEventsByIDResult.length;i++){
+          if(lookupEventsByIDResult[i]==id){
+            return 4;
+          }else{
+            return 1;
+          }
+        }
+      }
+    })
+    .attr("stroke", function(d){
+      var lookupEventsByIDResult = lookupEventsIDgiven[((d.getDate() < 10 ? '0' : '') + d.getDate()) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + d.getFullYear()];
+      if(lookupEventsByIDResult!=null){
+        for(i=0;i<lookupEventsByIDResult.length;i++){
+          if(lookupEventsByIDResult[i]==id){
+            return "#ffcc00";
+          }else{
+            return "#eeeeee";
+          }
+        }
+      }
+    }) // default light grey fill
     .on("mouseover", function(d) {
         div.transition()
                  .duration(200)
@@ -169,45 +224,22 @@ function drawCalendar(dateData){
     .on("click", function(d) {
       dispatch2.call("squareClick", d, d);
       var lookupEventsByIDandNameResult = lookupEventsByIDandName[d];
-      
-        var lookupEventsByIDandNameResultString = "";
-if(lookupEventsByIDandNameResult==null){
-          lookupEventsByIDandNameResultString = "empty";
-        }else{
-          console.log(lookupEventsByIDandNameResult);
-          lengthList = lookupEventsByIDandNameResult.length;
-          EventsID = lookupEventsByIDandNameResult[0,lengthList/2-1];
-          EventsNAME = lookupEventsByIDandNameResult[lengthList/2-1,lengthList-1];
-          EventsNAME.forEach(function(d) { 
-            lookupEventsByIDandNameResultString = lookupEventsByIDandNameResultString + "&nbsp&nbsp- <a href='#' onclick='" + teste(EventsID[])+ "' style='font-size:12px;'>" + d + "</a><br>"; 
-          });
-        }
-      $("#divInfoHeatmap").show();
-      $("#InfoHeatmap").html("Date: " + d+"<br>Tournaments:<br>"+lookupEventsByIDandNameResultString+"<br>");
-      /*div.transition()
-               .duration(200)
-               .style("display", "block");
-      div.html("<button type='button' id='closetip' class='close' aria-label='close' style='margin-top:-5px;color:white;opacity:1;'><span aria-hidden='true'>&times;</span></button>" +
-              "<strong>Date:</strong> <span style='color:red'>" + d +  "</span><br>" + 
-               "<strong>Tournaments:</strong> <span id='demo' style='color:red'></span><br>" + 
-               "<strong>Names:</strong> <br><span id='demo2' style='color:red'></span>")
-              .style("left", (d3.event.pageX) + "px")
-              .style("top", (d3.event.pageY + 42) + "px");
-      var lookupEventsByDateResult = lookupEventsByDate[d];
-      var lookupEventsByIDResult = lookupEventsByID[d];
-      var lookupEventsByIDResultString = "";
-      if(lookupEventsByDateResult==null){
-        lookupEventsByDateResult = 0;
-      }
-      if(lookupEventsByIDResult==null){
-        lookupEventsByIDResultString = "empty";
+      var lookupEventsByIDandNameResultString = "";
+      if(lookupEventsByIDandNameResult==null){
+        lookupEventsByIDandNameResultString = "empty<br>";
       }else{
-        lookupEventsByIDResult.forEach(function(d) {
-             lookupEventsByIDResultString = lookupEventsByIDResultString + " - " + d + "<br>"; 
+        lengthList = lookupEventsByIDandNameResult.length;
+        EventsID = lookupEventsByIDandNameResult.slice(0,lengthList/2);
+        EventsNAME = lookupEventsByIDandNameResult.slice(lengthList/2,lengthList);
+        var count = 0;
+        EventsNAME.forEach(function(d) { 
+          var name = String(EventsNAME[count]);
+          lookupEventsByIDandNameResultString = lookupEventsByIDandNameResultString + '&nbsp&nbsp- <a href="#" onclick="teste(' + EventsID[count] + ',\'' + name + '\')" style="font-size:12px;">' + d + '</a><br>'; 
+          count++;
         });
       }
-      $("#demo").html(lookupEventsByDateResult);
-      $("#demo2").html(lookupEventsByIDResultString);*/
+      $("#divInfoHeatmap").show();
+      $("#InfoHeatmap").html("Date: " + d+"<br>Tournaments:<br>"+lookupEventsByIDandNameResultString+"<br>");
     })
     .datum(format);
 
@@ -220,16 +252,17 @@ if(lookupEventsByIDandNameResult==null){
 
 }
 
-function updateData(year) {
+function updateData(year,id) {
   d3.select("#calendar").selectAll("svg").remove();
   d3.select("div[title=tip").remove();
+  $("#divInfoHeatmap").hide();
   d3.json("data/Events" + year + ".json", function(response) {
-   drawCalendar(response);
+   drawCalendar(response,id);
   });
 }
 
 window.onload = d3.json("data/Events2014.json", function(response){
-                  drawCalendar(response);
+                  drawCalendar(response,id);
                    $("#divInfoHeatmap").hide();
                 });
 /*
