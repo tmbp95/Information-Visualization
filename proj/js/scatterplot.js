@@ -13,7 +13,7 @@ dispatch.on("dotEnter.scatterplot", function(data){
     selectedDot.transition() // <------- TRANSITION STARTS HERE --------
                .delay(0) 
                .duration(200)
-               .attr("fill","orange")
+               .attr("fill","#71e7f4")
                .attr("r", 4);
   }  
 })
@@ -54,7 +54,7 @@ dispatch.on("dotClick.scatterplot", function(data){
     selectedDot.transition() // <------- TRANSITION STARTS HERE --------
                 .delay(0) 
                 .duration(200)
-                .attr("fill","red")
+                .attr("fill","orange")
                 .attr("r", 6);
   }else{
     selectedDot = d3.select("circle[title=\'"+clickedDot+"\'");
@@ -69,7 +69,7 @@ dispatch.on("dotClick.scatterplot", function(data){
     selectedDot.transition() // <------- TRANSITION STARTS HERE --------
                .delay(0) 
                .duration(200)
-               .attr("fill","red")
+               .attr("fill","orange")
                .attr("r", 6);
   }
 })
@@ -144,7 +144,7 @@ function gen_scatterplot(startYear) {
           })
           .attr("fill", function(d){
             if(d.YEAR==startYear && (begin == true || (begin==false && enterOutside==true))){
-              return "red";
+              return "orange";
             }else{
               return "black";
             }
@@ -157,16 +157,16 @@ function gen_scatterplot(startYear) {
             dispatch.call("dotEnter", d, d);
             div.transition()
                .duration(200)
-               .style("opacity", .9);
-            div.html("<strong>Year:</strong> <span style='color:red'>" + d.YEAR + "</span><br>" + 
-                      "<strong>Qty:</strong> <span style='color:red'>" + d.NumEvents + "</span>")
+               .style("opacity", .95);
+            div.html("<strong>Year:</strong> <span style='color:white'>" + d.YEAR + "</span><br>" + 
+                      "<strong>Tournaments:</strong> <span style='color:white'>" + d.NumEvents + "</span>")
                .style("left", (d3.event.pageX) + "px")
                .style("top", (d3.event.pageY - 42) + "px");
           })
           .on("mouseleave", function(d){
             dispatch.call("dotOut", d, d);
             div.transition()
-               .duration(500)
+               .duration(200)
                .style("opacity", 0);
           })
           .on("click", function(d){ 

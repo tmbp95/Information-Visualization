@@ -13,8 +13,29 @@ var config = {
 
 //Call function to draw the Radar chart
 d3.json("data/teste5.json", function(error, data) {
-    if (error) throw error;
-    RadarChart.draw("#radarchartPlayers", data, config);
+    
+     if (error) throw error;
+    console.log(data);
+    var arrayAxis = [];
+    var arrayAxis2 = [];
+    for(i=0;i<data[0].length;i++){
+      console.log(data[0][i].area)
+      if(data[0][i].area == "Kills" && killsinput2===true){
+        arrayAxis2.push(data[0][i]);
+      }
+      if(data[0][i].area == "Deaths" && deathsinput2===true){
+        arrayAxis2.push(data[0][i]);
+      }
+      if(data[0][i].area == "Losses" && lossesinput2===true){
+        arrayAxis2.push(data[0][i]);
+      }
+      if(data[0][i].area == "Wins" && winsinput2===true){
+        arrayAxis2.push(data[0][i]);
+      }
+    }
+    arrayAxis.push(arrayAxis2);
+    console.log(arrayAxis)
+    RadarChart.draw("#radarchartPlayers", arrayAxis, config);
 });
 
 var svg = d3.select('body')
@@ -27,7 +48,7 @@ var RadarChart = {
   draw: function(id, d, options){
     var cfg = {
      radius: 5,
-     w: 150,
+     w: 145,
      h: 150,
      factor: 1,
      factorLegend: .85,
@@ -40,7 +61,7 @@ var RadarChart = {
      TranslateY: 30,
      ExtraWidthX: 100,
      ExtraWidthY: 60,
-     color: d3.scaleOrdinal().range(["#6F257F", "#CA0D59"])
+     color: d3.scaleOrdinal().range(["#52a6af", "#CA0D59"])
     };
 	
     if('undefined' !== typeof options){
@@ -213,4 +234,27 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
     }
 };
 }
+
+var killsinput2 = $("#killsinput2").prop('checked');
+var deathsinput2 = $("#deathsinput2").prop('checked');
+var lossesinput2 = $("#lossesinput2").prop('checked');
+var winsinput2 = $("#winsinput2").prop('checked');
 gen_radarchartPlayers();
+
+$("#killsinput2").change(function () {
+  killsinput2 = $("#killsinput2").prop('checked');
+  gen_radarchartPlayers();
+})
+$("#deathsinput2").on("change", function(){
+  deathsinput2 = $("#deathsinput2").prop('checked');
+  gen_radarchartPlayers();
+})
+$("#lossesinput2").on("change", function(){
+  lossesinput2 = $("#lossesinput2").prop('checked');
+  gen_radarchartPlayers();
+})
+$("#winsinput2").on("change", function(){
+  winsinput2 = $("#winsinput2").prop('checked');
+  gen_radarchartPlayers();
+})
+

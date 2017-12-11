@@ -1,4 +1,6 @@
 function gen_radarchart() {
+  console.log(killsinput, deathsinput, lossesinput, winsinput)
+  d3.select("#radarchart").selectAll("svg").remove();
 var width = 120,
     height = 120;
 
@@ -14,7 +16,27 @@ var config = {
 //Call function to draw the Radar chart
 d3.json("data/teste2.json", function(error, data) {
     if (error) throw error;
-    RadarChart.draw("#radarchart", data, config);
+    console.log(data);
+    var arrayAxis = [];
+    var arrayAxis2 = [];
+    for(i=0;i<data[0].length;i++){
+      console.log(data[0][i].area)
+      if(data[0][i].area == "Kills" && killsinput===true){
+        arrayAxis2.push(data[0][i]);
+      }
+      if(data[0][i].area == "Deaths" && deathsinput===true){
+        arrayAxis2.push(data[0][i]);
+      }
+      if(data[0][i].area == "Losses" && lossesinput===true){
+        arrayAxis2.push(data[0][i]);
+      }
+      if(data[0][i].area == "Wins" && winsinput===true){
+        arrayAxis2.push(data[0][i]);
+      }
+    }
+    arrayAxis.push(arrayAxis2);
+    console.log(arrayAxis)
+    RadarChart.draw("#radarchart", arrayAxis, config);
 });
 
 var svg = d3.select('body')
@@ -40,7 +62,7 @@ var RadarChart = {
      TranslateY: 30,
      ExtraWidthX: 100,
      ExtraWidthY: 80,
-     color: d3.scaleOrdinal().range(["#6F257F", "#CA0D59"])
+     color: d3.scaleOrdinal().range(["#52a6af", "#CA0D59"])
     };
 	
     if('undefined' !== typeof options){
@@ -54,6 +76,7 @@ var RadarChart = {
     cfg.maxValue = 100;
     
     var allAxis = (d[0].map(function(i, j){return i.area}));
+  
     var total = allAxis.length;
     var radius = cfg.factor*Math.min(cfg.w/2, cfg.h/2);
     var Format = d3.format('%');
@@ -213,4 +236,28 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
     }
 };
 }
+var killsinput = $("#killsinput").prop('checked');
+var deathsinput = $("#deathsinput").prop('checked');
+var lossesinput = $("#lossesinput").prop('checked');
+var winsinput = $("#winsinput").prop('checked');
 gen_radarchart();
+
+$("#killsinput").change(function () {
+  killsinput = $("#killsinput").prop('checked');
+  gen_radarchart();
+})
+$("#deathsinput").on("change", function(){
+  deathsinput = $("#deathsinput").prop('checked');
+  gen_radarchart();
+})
+$("#lossesinput").on("change", function(){
+  lossesinput = $("#lossesinput").prop('checked');
+  gen_radarchart();
+})
+$("#winsinput").on("change", function(){
+  winsinput = $("#winsinput").prop('checked');
+  gen_radarchart();
+})
+
+console.log(killsinput, deathsinput, lossesinput, winsinput)
+

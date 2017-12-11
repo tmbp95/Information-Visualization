@@ -1,45 +1,45 @@
 body{
-	margin:0;
-	padding:0;
-	background:url(../img/bg.png) repeat; 
+  margin:0;
+  padding:0;
+  background:url(../img/bg.png) repeat; 
 }
 
 .table-hover tbody tr:hover td, 
 .table-hover tbody tr:hover th {
-	background-color: #52a6af;
+  background-color: #52a6af;
 }
 
 .table-hover tbody tr:hover td a{
-	color:white;
+  color:white;
 }
 
 path.line {
-	fill: none;
-	stroke: #52a6af;
-	stroke-width: 3px;
+  fill: none;
+  stroke: #52a6af;
+  stroke-width: 3px;
 }
 
 .axis path,
 .axis line {
-	fill: none;
-	stroke: slategray;
-	shape-rendering: crispEdges;
+  fill: none;
+  stroke: slategray;
+  shape-rendering: crispEdges;
 }
 
 a.rowtext{
-	cursor:pointer;
-	color:#52a6af;
+  cursor:pointer;
+  color:#52a6af;
 }
 
 .axis {
-	font: 10px sans-serif;
+  font: 10px sans-serif;
 }
 
 .axis path,
 .axis line {
-	fill: none;
-	stroke: #000;
-	shape-rendering: crispEdges;
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
 }
 
 .d3-tip {
@@ -72,49 +72,49 @@ a.rowtext{
 }
 
 #central{
-	width:1200px;
-	margin:0 auto;
-	display:table;
+  width:1200px;
+  margin:0 auto;
+  display:table;
 }
 #template_dir{
-	vertical-align:top;
-	float:left;
-	width:1200px;
-	position:relative;
+  vertical-align:top;
+  float:left;
+  width:1200px;
+  position:relative;
 }
 #paineldir{
-	/*border-top:1px #cecece solid;
-	border-right:1px #cecece solid;
-	background:url(../img/bg.png) repeat;*/
+  /*border-top:1px #cecece solid;
+  border-right:1px #cecece solid;
+  background:url(../img/bg.png) repeat;*/
 }
 #paineldir_box1{
-	border-top:1px #cecece solid;
-	border-right:1px #cecece solid;
-	background:#fdfdfd;
-	margin-top:10px;
-	width:1200px;
-	box-shadow: 3px 3px 3px #888888;
+  border-top:1px #cecece solid;
+  border-right:1px #cecece solid;
+  background:#fdfdfd;
+  margin-top:10px;
+  width:1200px;
+  box-shadow: 3px 3px 3px #888888;
 }
 #scatterplot{
-	margin-left:10px;
-	margin-bottom: 10px;
-	position:relative;
-	float:left;
-	border-right:1px dotted grey;
-	border-radius:0px;
+  margin-left:10px;
+  margin-bottom: 10px;
+  position:relative;
+  float:left;
+  border-right:1px dotted grey;
+  border-radius:0px;
 }
 
 div.tooltip {
   margin-left:2px;
   position: absolute;
   text-align: left;
-  width: 75px;
+  width: 110px;
   min-height: 30px;
   height: auto;
   padding: 4px;
   font: 12px sans-serif;
   background: #1f1f1f;
-  color:white;
+  color:#71e7f4;
   border: 0px;
   border-radius:5px;
   pointer-events: none;
@@ -126,15 +126,16 @@ div.tooltip2 {
   position: absolute;
   text-align: left;
   min-width: 180px;
-  min-height: 60px;
+  min-height: 30px;
   height:auto;
   max-width:380px;
   padding: 4px;
   font: 12px sans-serif;
   background: #1f1f1f;
-  color:white;
+  color:#71e7f4;
   border: 0px;
   border-radius:5px;
+  pointer-events: none;
 }
 div.tooltip3{ 
   margin-left:-25px;
@@ -148,7 +149,7 @@ div.tooltip3{
   padding: 4px;
   font: 12px sans-serif;
   background: #1f1f1f;
-  color:white;
+  color:#71e7f4;
   border: 0px;
   border-radius:5px;
 }
@@ -164,7 +165,7 @@ div.tooltip5{
   padding: 4px;
   font: 12px sans-serif;
   background: #1f1f1f;
-  color:white;
+  color:#71e7f4;
   border: 0px;
   border-radius:5px;
 }
@@ -192,6 +193,14 @@ div.tooltip5{
 }
 .day{
   pointer-events: auto;
+  color:red;
+  position:absolute;
+  z-index:1;
+}
+.textday{
+  position: absolute;
+  z-index:999;
+  font-size:9.5px;
 }
 .day:hover {
   stroke: #6d6E70;
@@ -203,12 +212,12 @@ div.tooltip5{
 }
 
 #sampleColor{
-	float:left;
-	width:14px;
-	height:14px;
-	border:1px solid #eeeeee;
-	margin-top:3px;
-	margin-left:2px;
+  float:left;
+  width:14px;
+  height:14px;
+  border:1px solid #eeeeee;
+  margin-top:3px;
+  margin-left:2px;
 }
 
 .autocomplete-suggestions { border: 1px solid #999; background: #fff; cursor: default; overflow: auto; height:100px;border-bottom-left-radius: 5px;}
@@ -218,54 +227,80 @@ div.tooltip5{
 
 
 #divInfoHeatmap{
-	width:400px;
-	height: 35px;
-	margin-left: 325px;
-	margin-top:-40px;
-	display: none;
-	height:auto;
-	color:#777;
+  width:400px;
+  height: 35px;
+  margin-left: 325px;
+  margin-top:-40px;
+  display: none;
+  height:auto;
+  color:#777;
 }
 
 #InfoHeatmap{
-	font-size:13px;
+  font-size:13px;
 }
 #bubblechart{
-	margin-left:10px;
-	margin-bottom: 10px;
-	position:relative;
-	float:left;
-	border-right:1px dotted grey;
-	border-radius:0px;
+  margin-left:10px;
+  margin-bottom: 10px;
+  position:relative;
+  float:left;
+  border-radius:0px;
 }
 
-.bubblechartBall:hover{
-	stroke: #71e7f4;
-  	stroke-width: 2;
+.bubblechartBall:hover {
+  stroke: #6d6E70;
+  stroke-width: 2;
+}
+.bubblechartBall:focus {
+  stroke: #ffff33;
+  stroke-width: 2;
+}
+
+#radarchart2{
+  width:290px;
+  margin-left:10px;
+  margin-bottom: 10px;
+  position:relative;
+  float:left;
+  border-left:1px dotted grey;
+  border-right:1px dotted grey;
+  border-radius:0px;
 }
 
 #radarchart{
-	margin-left:10px;
-	margin-bottom: 10px;
-	position:relative;
-	float:left;
-	border-right:1px dotted grey;
-	border-radius:0px;
+  margin-left:15px;
+  margin-bottom: 10px;
+  height:150px;
+}
+
+#radarchartPlayers{
+  margin-left:15px;
+  margin-bottom: 10px;
+  height:150px;
+}
+
+#togglesradar{
+  width:180px;
+  position:relative;
+  left:50%;
+  margin-left:-90px;
+  margin-top:45px;
+  font-size:12px;
 }
 
 #barchart{
-	margin-left:-15px;
-	position:relative;
-	float:left;
+  margin-left:-15px;
+  position:relative;
+  float:left;
 }
 
 .bar:hover {
-  fill:#00c2df;
+  fill:#6d6E70;
 }
   
   .toolTip {
   pointer-events: none;
-	position: absolute;
+  position: absolute;
     display: none;
   min-width: 50px;
   height: auto;
@@ -290,33 +325,25 @@ div.tooltip5{
   margin-left: -12px;
 }  
 .toolTip span {
-	font-weight: 500;
+  font-weight: 500;
   color: #081F2C;
 }
 
 #horizbarchart{
-	margin-left:10px;
-	margin-bottom: 10px;
-	position:relative;
-	float:left;
-	border-right:1px dotted grey;
-	border-radius:0px;
+  margin-left:10px;
+  margin-bottom: 10px;
+  position:relative;
+  float:left;
+  border-radius:0px;
 }
 
-#radarchartPlayers{
-	margin-left:10px;
-	margin-bottom: 10px;
-	position:relative;
-	float:left;
-	border-right:1px dotted grey;
-	border-radius:0px;
-}
+
 
 #linechart{
-	margin-left:10px;
-	margin-bottom: 10px;
-	position:relative;
-	float:left;
+  margin-left:10px;
+  margin-bottom: 10px;
+  position:relative;
+  float:left;
 }
 
 .area {
@@ -330,4 +357,61 @@ div.tooltip5{
   cursor: move;
   fill: none;
   pointer-events: all;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 28px;
+  height: 17px;
+}
+
+.switch input {display:none;}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  margin-left:0px;
+}
+
+input:checked + .slider {
+  background-color: #52a6af;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #52a6af;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(11px);
+  -ms-transform: translateX(11px);
+  transform: translateX(11px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 12px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }

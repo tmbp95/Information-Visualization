@@ -61,6 +61,12 @@ function drawCalendar(dateData,id){
       monthName = d3.timeFormat("%B"),
       months= d3.timeMonth.range(d3.timeMonth.floor(minDate), maxDate);
 
+  d3.selection.prototype.moveToFront = function() {
+    return this.each(function(){
+    this.parentNode.appendChild(this);
+    });
+  };
+
   var svg = d3.select("#calendar").selectAll("svg")
     .data(months)
     .enter().append("svg")
@@ -144,6 +150,31 @@ function drawCalendar(dateData,id){
     })    
     .object(dateData);
 
+
+    svg.selectAll("rect.day")
+    .data(function(d, i) { return d3.timeDays(d, new Date(d.getFullYear(), d.getMonth()+1, 1)); })
+    .enter().append("text")
+    .attr("class", "textday")
+    .attr("y", function(d) { return (day(d) * cellSize) + (day(d) * cellMargin) + cellMargin; })
+    .attr("dy", "1.18em")
+    .attr("x", function(d) { return ((week(d) - week(new Date(d.getFullYear(),d.getMonth(),1))) * cellSize) + ((week(d) - week(new Date(d.getFullYear(),d.getMonth(),1))) * cellMargin) + cellMargin; })
+    .attr("dx", "0.75em")
+    .attr("text-anchor", "middle")
+    .style("position", "absolute")
+    .style("z-index", 9999)
+    /*.style("fill", function(d){
+      var lookupEventsByIDResult = lookupEventsIDgiven[((d.getDate() < 10 ? '0' : '') + d.getDate()) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + d.getFullYear()];
+      if(lookupEventsByIDResult!=null){
+        for(i=0;i<lookupEventsByIDResult.length;i++){
+          return "white";
+        }
+      }else{
+        return "#a0a0a0";
+      }
+    })
+    .text(function(d){
+      return d.getDate();
+    });*/
   var rect = svg.selectAll("rect.day")
     .data(function(d, i) { return d3.timeDays(d, new Date(d.getFullYear(), d.getMonth()+1, 1)); })
     .enter().append("rect")
@@ -194,10 +225,10 @@ function drawCalendar(dateData,id){
     .on("mouseover", function(d) {
         div.transition()
                  .duration(200)
-                 .style("opacity", 1)
-        div.html("<strong>Date:</strong> <span style='color:red'>" + d +  "</span><br>" + 
-                 "<strong>Tournaments:</strong> <span id='demo' style='color:red'></span><br>" + 
-                 "<strong>Names:</strong> <br><span id='demo2' style='color:red'></span>")
+                 .style("opacity", 0.95)
+        div.html("<strong>Date:</strong> <span style='color:white'>" + d +  "</span><br>" + 
+                 "<strong>Tournaments:</strong> <span id='demo' style='color:white'></span><br>" + 
+                 "<span id='demo2' style='color:white'></span>")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY + 42) + "px");
         var lookupEventsByDateResult = lookupEventsByDate[d];
@@ -207,10 +238,10 @@ function drawCalendar(dateData,id){
           lookupEventsByDateResult = 0;
         }
         if(lookupEventsByIDResult==null){
-          lookupEventsByIDResultString = "empty";
+          lookupEventsByIDResultString = "";
         }else{
           lookupEventsByIDResult.forEach(function(d) {
-               lookupEventsByIDResultString = lookupEventsByIDResultString + " - " + d + "<br>"; 
+               lookupEventsByIDResultString = lookupEventsByIDResultString + "&nbsp&nbsp - " + d + "<br>"; 
           });
         }
         $("#demo").html(lookupEventsByDateResult);
@@ -218,7 +249,7 @@ function drawCalendar(dateData,id){
     })
     .on("mouseleave", function(d){
             div.transition()
-               .duration(500)
+               .duration(200)
                .style("opacity", 0);
     })
     .on("click", function(d) {
@@ -250,6 +281,10 @@ function drawCalendar(dateData,id){
   rect.filter(function(d) { return d in lookupEventsByDate; })
     .style("fill", function(d) { return scale(lookupEventsByDate[d]); })
 
+
+  var sel = d3.selectAll('.textday');
+  sel.moveToFront();
+
 }
 
 function updateData(year,id) {
@@ -265,6 +300,8 @@ window.onload = d3.json("data/Events2014.json", function(response){
                   drawCalendar(response,id);
                    $("#divInfoHeatmap").hide();
                 });
+
+
 /*
 $("body").click(function(e){
   if(e.target.className !== "tooltip2"){

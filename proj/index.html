@@ -26,7 +26,9 @@
 							<input name="checkbox" data-toggle="toggle" data-on="Teams" data-off="Players" type="checkbox">
 						</div>-->
 						<div id="topPlayers">
-							<h4 style="margin-left:20px;margin-top:-4px;">Tournaments By Year</h4>
+							<h4 style="margin-left:20px;margin-top:-4px;float:left">Tournaments by Year</h4>
+							<h4 style="margin-right:605px;margin-top:-4px;float:right;position:relative;">Calendar of Tournaments for <text class="yearlabel">2014</text></h4>
+							<div style="clear:both"></div>
 							<div id="scatterplot"></div>
 							<div style="float:left;width:500px;height:20px;margin-left:10px;margin-top:10px;">
 								<span style="float:left;margin-top:2px;" class="month-name">Less</span>
@@ -44,6 +46,7 @@
 							    </div><!-- /input-group -->
 							</div>
 							<div id="calendar"></div>
+
 						</div>	
 						<div style="clear:both"></div>
 						<div id="divInfoHeatmap">
@@ -60,8 +63,61 @@
 							    	<button class="btn btn-default" type="button" style="height:25px;"><span class="glyphicon glyphicon-search" aria-hidden="true" style="position:relative;top:-3px;"></span></button>
 							    </span>
 							</div><!-- /input-group -->
+							<div id="buttonExpand" style="position:absolute;z-index:999999;left:575px;">
+								<button type="button" id="buttonExpandButton" class="btn btn-default btn-lg" style="width:30px;height:30px;font-size:0.9em;color:#333;">
+								  <span class="glyphicon glyphicon-fullscreen" aria-hidden="true" style="position:relative;top:-2px;left:-7px;"></span>
+								</button>
+							</div>
+							<div id="buttonContract" style="display:none;position:absolute;z-index:999999;left:575px;">
+								<button type="button" id="buttonContractButton" class="btn btn-default btn-lg" style="width:30px;height:30px;font-size:0.9em;color:#333;">
+								  <span class="glyphicon glyphicon-resize-small" aria-hidden="true" style="position:relative;top:-2px;left:-7px;"></span>
+								</button>
+							</div>
 							<div id="bubblechart"></div>
-							<div id="radarchart"></div>
+							<div id="radarchart2">
+								<div id="radarchart">
+									
+								</div>
+								<div id="togglesradar">
+									<label style="font-size:14px;font-weight: normal;width:105px;position:relative;left:50%;margin-left:-52.5px;">- Showing Axis -</label>
+									<table>
+										<tr>
+											<td style="width:50px;">Kills</td>
+											<td style="width:50px;">
+												<label class="switch">
+													<input type="checkbox" id="killsinput" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+											<td style="width:50px;">Deaths</td>
+											<td>
+												<label class="switch">
+													<input type="checkbox"  id="deathsinput" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+										</tr>
+										<tr>
+											<td>Losses</td>
+											<td>
+												<label class="switch">
+													<input type="checkbox"  id="lossesinput" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+											<td>Wins</td>
+											<td>
+												<label class="switch">
+													<input type="checkbox"  id="winsinput" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+										</tr>
+									</table>
+									<br>
+								</div>
+								<div style="clear:both"></div>
+							</div>
 							<div id="barchart"></div>
 						</div>
 						<div style="clear:both"></div>
@@ -78,7 +134,50 @@
 							</div><!-- /input-group -->
 							<div style="clear:both"></div>
 							<div id="horizbarchart"></div>
-							<div id="radarchartPlayers"></div>
+							<div id="radarchart2" style="width:275px;">
+								<div id="radarchartPlayers">
+									
+								</div>
+								<div id="togglesradar">
+									<label style="font-size:14px;font-weight: normal;width:105px;position:relative;left:50%;margin-left:-52.5px;">- Showing Axis -</label>
+									<table>
+										<tr>
+											<td style="width:50px;">Kills</td>
+											<td style="width:50px;">
+												<label class="switch">
+													<input type="checkbox" id="killsinput2" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+											<td style="width:50px;">Deaths</td>
+											<td>
+												<label class="switch">
+													<input type="checkbox"  id="deathsinput2" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+										</tr>
+										<tr>
+											<td>Losses</td>
+											<td>
+												<label class="switch">
+													<input type="checkbox"  id="lossesinput2" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+											<td>Wins</td>
+											<td>
+												<label class="switch">
+													<input type="checkbox"  id="winsinput2" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+										</tr>
+									</table>
+									<br>
+								</div>
+								<div style="clear:both"></div>
+							</div>
 							<div id="linechart"></div>
 						</div>
 						<div style="clear:both"></div>
@@ -117,6 +216,7 @@
           						clickedDot=2000+d.YEAR;
           						gen_scatterplot(clickedDot);
           						updateData(clickedDot,d.ID);
+          						$(".yearlabel").html(clickedDot);
           						$("#ESTE").css("fill", "#ccc");        						
           						teste(d.ID,d.Name);
           					}

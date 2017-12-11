@@ -5,7 +5,7 @@ var begin = true;
 function gen_linechart() {
 
 var margin = {top: 10, right: 20, bottom: 90, left: 20},
-      width = 570 - margin.left - margin.right,
+      width = 560 - margin.left - margin.right,
       height = 200 - margin.top - margin.bottom
       margin2 = {top: 130, right: 20, bottom: 30, left: 20},
       height2 = 200 - margin2.top - margin2.bottom;

@@ -26,7 +26,7 @@ dispatch4.on("BallClick.bubblechart", function(data){
     selectedBall.transition() // <------- TRANSITION STARTS HERE --------
                 .delay(0) 
                 .duration(200)
-                .attr("fill","red")
+                .attr("fill","orange")
   }else{
     selectedBall = d3.select("circle[title=\'"+clickedBall+"\'");
     selectedBall.transition();
@@ -40,7 +40,7 @@ dispatch4.on("BallClick.bubblechart", function(data){
     selectedBall.transition() // <------- TRANSITION STARTS HERE --------
                .delay(0) 
                .duration(200)
-               .attr("fill","red")
+               .attr("fill","orange")
   }
 })
 
@@ -65,7 +65,7 @@ function gen_bubblechart(ola) {
   // Set the dimensions of the canvas / graph
   var margin = {top: 30, right: 30, bottom: 40, left: 55},
       width = 600 - margin.left - margin.right,
-      height = 200 - margin.top - margin.bottom;
+      height = 280 - margin.top - margin.bottom;
 
   // Set the ranges
   var x = d3.scaleBand().range([0, width])
@@ -123,11 +123,11 @@ function gen_bubblechart(ola) {
           })
           .attr("fill", function(d){
             if(d.Ranking==1){
-              return "orange";
+              return "#41848b";
             }else if(d.Ranking==2){
-              return "green";
+              return "#52a6af";
             }else if(d.Ranking==3){
-              return "blue";
+              return "#71e7f4";
             }else{
               return "black;"
             }
@@ -146,8 +146,8 @@ function gen_bubblechart(ola) {
         div.transition()
             .duration(200)
             .style("opacity", .9);
-        div.html("<strong>Team:</strong> <span style='color:red'>" + d.NAME + "</span><br>" + 
-                 "<strong>Rating:</strong> <span style='color:red'>" + d.Rating + "</span>")
+        div.html("<strong>Team:</strong> <span style='color:white'>" + d.NAME + "</span><br>" + 
+                 "<strong>Rating:</strong> <span style='color:white'>" + d.Rating + "</span>")
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY - 52) + "px");
       })
@@ -184,3 +184,16 @@ function gen_bubblechart(ola) {
 
   });
 }
+
+
+$("#buttonExpandButton").click(function(){
+  $("#buttonExpand").hide();
+  $("#buttonContract").show();
+  d3.select("#bubblechart").select("svg").attr('transform', 'scale(2,1)');
+
+})
+
+$("#buttonContractButton").click(function(){
+  $("#buttonContract").hide();
+  $("#buttonExpand").show();
+})

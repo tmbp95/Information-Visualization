@@ -67,8 +67,8 @@ d3.json("data/teste4.json", function(error, data) {
         div.transition()
             .duration(200)
             .style("opacity", .9);
-        div.html("<strong>Player:</strong> <span style='color:red'>" + d.name + "</span><br>" + 
-                 "<strong>Rating:</strong> <span style='color:red'>" + d.rating + "</span>")
+        div.html("<strong>Player:</strong> <span style='color:white'>" + d.name + "</span><br>" + 
+                 "<strong>Rating:</strong> <span style='color:white'>" + d.rating + "</span>")
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY) + "px");
       })

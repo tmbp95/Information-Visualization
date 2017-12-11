@@ -27,7 +27,7 @@ var y = d3.scaleLinear()
     .rangeRound([height, 0]);
 
 var z = d3.scaleOrdinal()
-    .range(["#0c83de", "#ffb515"]);
+    .range(["#52a6af", "#71e7f4"]);
 
 d3.csv("data/teste3.csv", function(d, i, columns) {
   for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]];
@@ -59,8 +59,8 @@ d3.csv("data/teste3.csv", function(d, i, columns) {
         div.transition()
             .duration(200)
             .style("opacity", .9);
-        div.html("<strong>Side:</strong> <span style='color:red'>" + d.key + "</span><br>" + 
-                 "<strong>Win%:</strong> <span style='color:red'>" + d.value + "%</span>")
+        div.html("<strong>Side:</strong> <span style='color:white'>" + d.key + "</span><br>" + 
+                 "<strong>Win%:</strong> <span style='color:white'>" + d.value + "%</span>")
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY - 42) + "px");
       })

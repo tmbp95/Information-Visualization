@@ -1,8 +1,8 @@
 [
     [
-      {"area": "Kills ", "value": 80},
+      {"area": "Kills", "value": 80},
       {"area": "Deaths", "value": 40},
-      {"area": "Losses ", "value": 40},
-      {"area": "Wins ", "value": 90}
+      {"area": "Losses", "value": 40},
+      {"area": "Wins", "value": 90}
   	]
   ]
