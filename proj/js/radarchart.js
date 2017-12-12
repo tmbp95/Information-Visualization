@@ -171,7 +171,13 @@ var RadarChart = {
              .append("polygon")
              .attr("class", "radar-chart-serie"+series)
              .style("stroke-width", "2px")
-             .style("stroke", cfg.color(series))
+             .style("stroke", function(){
+              if(BallClick==1){
+                return "orange";
+              }else{
+                return cfg.color(series);
+              }
+              })
              .attr("points",function(d) {
                var str="";
                for(var pti=0;pti<d.length;pti++){
@@ -179,7 +185,14 @@ var RadarChart = {
                }
                return str;
               })
-             .style("fill", function(j, i){return cfg.color(series)})
+             .style("fill", function(j, i){
+              if(BallClick==1){
+                return "orange";
+              }else{
+                return cfg.color(series)
+              }
+             
+            })
              .style("fill-opacity", cfg.opacityArea)
              .on('mouseover', function (d){
                       z = "polygon."+d3.select(this).attr("class");
@@ -221,7 +234,14 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
       .attr("data-id", function(j){return j.area})
       .style("fill", "#fff")
       .style("stroke-width", "2px")
-      .style("stroke", cfg.color(series)).style("fill-opacity", .9)
+      .style("stroke", function(){
+        if(BallClick==1){
+                return "orange";
+              }else{
+                return cfg.color(series)
+              }
+      })
+      .style("fill-opacity", .9)
       .on('mouseover', function (d){
             tooltip
               .style("left", d3.event.pageX - 40 + "px")

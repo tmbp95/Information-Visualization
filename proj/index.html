@@ -7,6 +7,7 @@
 	<head>
 		<title>CS GO STATS</title>
 		<link href="css/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/checkbox.css">
 		<link rel="stylesheet" href="css/style.css">
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/d3v4.js"></script>
@@ -56,29 +57,25 @@
 					<div id="paineldir_box1" class="bubblechartBOX" style="display:none;margin-top:5px;">
 						<br>
 						<div id="topPlayers">
-							<h4 style="margin-left:20px;margin-top:-4px;">Teams in <font id="tournamentsfont"></font></h4>
-							<div class="input-group" style="margin-left:20px;margin-top:2px;width:180px;">
+							<h4 style="margin-left:20px;margin-top:-4px;">Teams that played in - <font id="tournamentsfont"></font> - Tournament</h4>
+							<font style="margin-left:20px;margin-top:5px;float:left;">Search for a Team: </font>
+							<div class="input-group" style="margin-left:10px;margin-top:2px;width:180px;float:left;">
 							    <input type="search" class="form-control autocompleteTeams" placeholder="Search for a Team" id="autocomplete" style="height:25px;font-size:12px;width:180px;">
 							    <span class="input-group-btn">
 							    	<button class="btn btn-default" type="button" style="height:25px;"><span class="glyphicon glyphicon-search" aria-hidden="true" style="position:relative;top:-3px;"></span></button>
 							    </span>
 							</div><!-- /input-group -->
-							<div id="buttonExpand" style="position:absolute;z-index:999999;left:575px;">
-								<button type="button" id="buttonExpandButton" class="btn btn-default btn-lg" style="width:30px;height:30px;font-size:0.9em;color:#333;">
-								  <span class="glyphicon glyphicon-fullscreen" aria-hidden="true" style="position:relative;top:-2px;left:-7px;"></span>
-								</button>
-							</div>
-							<div id="buttonContract" style="display:none;position:absolute;z-index:999999;left:575px;">
-								<button type="button" id="buttonContractButton" class="btn btn-default btn-lg" style="width:30px;height:30px;font-size:0.9em;color:#333;">
-								  <span class="glyphicon glyphicon-resize-small" aria-hidden="true" style="position:relative;top:-2px;left:-7px;"></span>
-								</button>
-							</div>
+							<font style="margin-left:10px;margin-top:5px;float:left;">(or select one circle from the chart)</font>
+							<div style="clear:both;"></div>
 							<div id="bubblechart"></div>
 							<div id="radarchart2">
+								<label style="font-size:1.0em;position:relative;top:-18px;width:105px;left:50%;margin-left:-52.5px;">Stats for Team <br></label>
+								<label style="font-size:1.0em;position:relative;" class="Teamlabel"></label>
 								<div id="radarchart">
 									
 								</div>
 								<div id="togglesradar">
+
 									<label style="font-size:14px;font-weight: normal;width:105px;position:relative;left:50%;margin-left:-52.5px;">- Showing Axis -</label>
 									<table>
 										<tr>
@@ -118,7 +115,85 @@
 								</div>
 								<div style="clear:both"></div>
 							</div>
-							<div id="barchart"></div>
+							<label style="font-size:1.0em;position:relative;top:-18px;margin-left:46px;">Maps (Sides Win Percentage)</label>
+							
+							<div id="barchartBox">
+								<div id="barchart"></div>
+								<div id="mapsSelection">
+									<div id="imagemMap">
+										<img src="img/dust2.png" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox1" checked/>
+								            	<label for="checkbox1"><text style="position:relative;left:-10px;">Dust2</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/nuke.png" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox2" checked/>
+								            	<label for="checkbox2"><text style="position:relative;left:-10px;">Nuke</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/mirage.png" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox3" checked/>
+								            	<label for="checkbox3"><text style="position:relative;left:-10px;">Mirage</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/inferno.png" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox4"/>
+								            	<label for="checkbox4"><text style="position:relative;left:-10px;">Inferno</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/cobblestone.png" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox5"/>
+								            	<label for="checkbox5"><text style="position:relative;left:-10px;">Cobble</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/cache.png" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox6"/>
+								            	<label for="checkbox6"><text style="position:relative;left:-10px;">Cache</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/overpass.png" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox7"/>
+								            	<label for="checkbox7"><text style="position:relative;left:-10px;">OverPass</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/tuscan.png" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox8"/>
+								            	<label for="checkbox8"><text style="position:relative;left:-10px;">Tuscan</text></label>
+								       		</div>
+								       	</div>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div style="clear:both"></div>
 					</div>

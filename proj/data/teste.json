@@ -1,1 +1,9 @@
-[{"NAME":"T1","Rating":0.8,"Ranking":1,"Prize":10000},{"NAME":"T2","Rating":1,"Ranking":2,"Prize":4000},{"NAME":"T3","Rating":0.5,"Ranking":3,"Prize":500},{"NAME":"T4","Rating":1.3,"Ranking":4,"Prize":0},{"NAME":"T5","Rating":1.1,"Ranking":5,"Prize":0},{"NAME":"T6","Rating":0.3,"Ranking":6,"Prize":0},{"NAME":"T7","Rating":0.5,"Ranking":7,"Prize":0}]
+[
+	{"NAME":"The Titans","Rating":0.8,"Ranking":1,"Prize":10000},
+	{"NAME":"r4v","Rating":1,"Ranking":2,"Prize":4000},
+	{"NAME":"masterpiece","Rating":0.5,"Ranking":3,"Prize":500},
+	{"NAME":"Gial","Rating":1.3,"Ranking":4,"Prize":0},
+	{"NAME":"ultra.h","Rating":1.1,"Ranking":5,"Prize":0},
+	{"NAME":"EG","Rating":0.3,"Ranking":6,"Prize":0},
+	{"NAME":"erogenic","Rating":0.5,"Ranking":7,"Prize":0}
+]

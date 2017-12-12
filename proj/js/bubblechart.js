@@ -5,7 +5,7 @@ var clickedBall;
 var begin = true;
 var idTournament, nameTournament;
 var show = 0;
-var colorBall;
+var colorBall,size;
 
 dispatch4.on("BallClick.bubblechart", function(data){
   if(BallClick==0){
@@ -27,6 +27,14 @@ dispatch4.on("BallClick.bubblechart", function(data){
                 .delay(0) 
                 .duration(200)
                 .attr("fill","orange")
+                .attr("stroke", "#6d6E70")
+                .attr("stroke-width", 2);
+
+    var killsinput = $("#killsinput").prop('checked');
+    var deathsinput = $("#deathsinput").prop('checked');
+    var lossesinput = $("#lossesinput").prop('checked');
+    var winsinput = $("#winsinput").prop('checked');
+    gen_radarchart();
   }else{
     selectedBall = d3.select("circle[title=\'"+clickedBall+"\'");
     selectedBall.transition();
@@ -34,6 +42,7 @@ dispatch4.on("BallClick.bubblechart", function(data){
                .delay(0) 
                .duration(200)
                .attr("fill",colorBall)
+               .attr("stroke-width", 0)
     clickedBall = data.NAME;
     selectedBall = d3.select("circle[title=\'"+data.NAME+"\'");
     colorBall = selectedBall.attr("fill");
@@ -41,6 +50,13 @@ dispatch4.on("BallClick.bubblechart", function(data){
                .delay(0) 
                .duration(200)
                .attr("fill","orange")
+               .attr("stroke", "#6d6E70")
+                .attr("stroke-width", 2);
+    var killsinput = $("#killsinput").prop('checked');
+    var deathsinput = $("#deathsinput").prop('checked');
+    var lossesinput = $("#lossesinput").prop('checked');
+    var winsinput = $("#winsinput").prop('checked');
+    gen_radarchart();
   }
 })
 
@@ -60,11 +76,14 @@ function teste(data, data2){
   }
 }
   
-function gen_bubblechart(ola) {
+function gen_bubblechart(ola, size) {
   show = 1;
+  if(size == null){
+    size = 600;
+  }
   // Set the dimensions of the canvas / graph
   var margin = {top: 30, right: 30, bottom: 40, left: 55},
-      width = 600 - margin.left - margin.right,
+      width = size - margin.left - margin.right,
       height = 280 - margin.top - margin.bottom;
 
   // Set the ranges
@@ -113,17 +132,22 @@ function gen_bubblechart(ola) {
         .enter().append("circle")
           .attr("r", function(d) { 
             if(d.Prize==0){ 
-              return 2;
+              return 3;
             }else if(d.Prize>=1600){
-              return d.Prize/800+2
+              return d.Prize/800+3
             }else{
-              return d.Prize/200+2
+              return d.Prize/200+3
             }
 
           })
           .attr("fill", function(d){
             if(d.Ranking==1){
+               $(".Teamlabel").html(d.NAME);
+             var widthBox = parseFloat($(".Teamlabel").css("width"));
+             $(".Teamlabel").css("left", "30%");
+            $(".Teamlabel").css("margin-left", -(widthBox/2));
               return "#41848b";
+
             }else if(d.Ranking==2){
               return "#52a6af";
             }else if(d.Ranking==3){
@@ -132,7 +156,7 @@ function gen_bubblechart(ola) {
               return "black;"
             }
           }) 
-          .attr("stroke","black")
+          .attr("stroke","#eee")
           .attr("stroke-width", 1)
           .attr("cursor","pointer")
           .attr("class","bubblechartBall")
@@ -150,6 +174,25 @@ function gen_bubblechart(ola) {
                  "<strong>Rating:</strong> <span style='color:white'>" + d.Rating + "</span>")
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY - 52) + "px");
+
+            if(BallClick==1){
+              if(clickedBall != d.NAME){
+                $(".Teamlabel").html(clickedBall + " VS " + d.NAME);
+                var widthBox = parseFloat($(".Teamlabel").css("width"));
+                $(".Teamlabel").css("left", "30%");
+                $(".Teamlabel").css("margin-left", -(widthBox/2));
+              }else{
+                $(".Teamlabel").html(d.NAME);
+                var widthBox = parseFloat($(".Teamlabel").css("width"));
+                $(".Teamlabel").css("left", "30%");
+                $(".Teamlabel").css("margin-left", -(widthBox/2));
+              }
+            }else if(BallClick == 0){
+              $(".Teamlabel").html(d.NAME);
+              var widthBox = parseFloat($(".Teamlabel").css("width"));
+              $(".Teamlabel").css("left", "30%");
+              $(".Teamlabel").css("margin-left", -(widthBox/2));
+            }
       })
       .on("mouseleave", function(d){
         div.transition()
@@ -184,16 +227,3 @@ function gen_bubblechart(ola) {
 
   });
 }
-
-
-$("#buttonExpandButton").click(function(){
-  $("#buttonExpand").hide();
-  $("#buttonContract").show();
-  d3.select("#bubblechart").select("svg").attr('transform', 'scale(2,1)');
-
-})
-
-$("#buttonContractButton").click(function(){
-  $("#buttonContract").hide();
-  $("#buttonExpand").show();
-})

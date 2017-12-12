@@ -288,20 +288,39 @@ div.tooltip5{
   font-size:12px;
 }
 
-#barchart{
+#barchartBox{
   margin-left:-15px;
   position:relative;
   float:left;
 }
 
+#barchart{
+  
+}
+
 .bar:hover {
   fill:#6d6E70;
+}
+
+#mapsSelection{
+  width:270px;
+  height:110px;
+  margin-left:25px;
+  margin-bottom:10px;
+  overflow-x:auto; 
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+#imagemMap{
+  position:relative;
+  width:80px;
+  display: inline-block;
 }
   
   .toolTip {
   pointer-events: none;
   position: absolute;
-    display: none;
+  display: none;
   min-width: 50px;
   height: auto;
   background: none repeat scroll 0 0 #ffffff;

@@ -1,6 +1,7 @@
 function gen_barchart() {
+  d3.select("#barchart").selectAll("svg").remove();
 var margin = {top: 30, right: 30, bottom: 40, left: 55},
-      width = 300 - margin.left - margin.right,
+      width = 290 - margin.left - margin.right,
       height = 200 - margin.top - margin.bottom;
 
 
@@ -29,13 +30,42 @@ var y = d3.scaleLinear()
 var z = d3.scaleOrdinal()
     .range(["#52a6af", "#71e7f4"]);
 
-d3.csv("data/teste3.csv", function(d, i, columns) {
-  for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]];
-  return d;
-}, function(error, data) {
+d3.json("data/teste3.json", function(error, data) {
+  console.log(data)
+
+      var arrayAxis = [];
+      for(i=0;i<data.length;i++){
+        if(data[i].Map == "Dust2" && checkbox1 === true){
+          arrayAxis.push(data[i]);
+        }
+        if(data[i].Map == "Nuke" && checkbox2 === true){
+          arrayAxis.push(data[i]);
+        }
+        if(data[i].Map == "Mirage" && checkbox3 === true){
+          arrayAxis.push(data[i]);
+        }
+        if(data[i].Map == "Inferno" && checkbox4 === true){
+          arrayAxis.push(data[i]);
+        }
+        if(data[i].Map == "CobStone" && checkbox5 === true){
+          arrayAxis.push(data[i]);
+        }
+        if(data[i].Map == "Cache" && checkbox6 === true){
+          arrayAxis.push(data[i]);
+        }
+        if(data[i].Map == "Overpass" && checkbox7 === true){
+          arrayAxis.push(data[i]);
+        }
+        if(data[i].Map == "Tuscan" && checkbox8 === true){
+          arrayAxis.push(data[i]);
+        }
+      }
+      console.log(arrayAxis)
+    data = arrayAxis;
+
   if (error) throw error;
 
-  var keys = data.columns.slice(1);
+  var keys = ["CT", "T"];
 
   x0.domain(data.map(function(d) { return d.Map; }));
   x1.domain(keys).rangeRound([0, x0.bandwidth()]);
@@ -110,4 +140,48 @@ d3.csv("data/teste3.csv", function(d, i, columns) {
       .text(function(d) { return d; });
 });
 }
+
+
+var checkbox1 = $("#checkbox1").prop('checked');
+var checkbox2 = $("#checkbox2").prop('checked');
+var checkbox3 = $("#checkbox3").prop('checked');
+var checkbox4 = $("#checkbox4").prop('checked');
+var checkbox5 = $("#checkbox5").prop('checked');
+var checkbox6 = $("#checkbox6").prop('checked');
+var checkbox7 = $("#checkbox7").prop('checked');
+var checkbox8 = $("#checkbox8").prop('checked');
+
 gen_barchart();
+
+$("#checkbox1").on("change", function(){
+  checkbox1 = $("#checkbox1").prop('checked');
+  gen_barchart();
+})
+$("#checkbox2").on("change", function(){
+  checkbox2 = $("#checkbox2").prop('checked');
+  gen_barchart();
+})
+$("#checkbox3").on("change", function(){
+  checkbox3 = $("#checkbox3").prop('checked');
+  gen_barchart();
+})
+$("#checkbox4").on("change", function(){
+  checkbox4 = $("#checkbox4").prop('checked');
+  gen_barchart();
+})
+$("#checkbox5").on("change", function(){
+  checkbox5 = $("#checkbox5").prop('checked');
+  gen_barchart();
+})
+$("#checkbox6").on("change", function(){
+  checkbox6 = $("#checkbox6").prop('checked');
+  gen_barchart();
+})
+$("#checkbox7").on("change", function(){
+  checkbox7 = $("#checkbox7").prop('checked');
+  gen_barchart();
+})
+$("#checkbox8").on("change", function(){
+  checkbox8 = $("#checkbox8").prop('checked');
+  gen_barchart();
+})
