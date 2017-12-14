@@ -143,6 +143,7 @@ function gen_bubblechart(ola, size) {
           .attr("fill", function(d){
             if(d.Ranking==1){
                $(".Teamlabel").html(d.NAME);
+               $("#nameofteam").val(d.NAME);
              var widthBox = parseFloat($(".Teamlabel").css("width"));
              $(".Teamlabel").css("left", "30%");
             $(".Teamlabel").css("margin-left", -(widthBox/2));
@@ -181,17 +182,23 @@ function gen_bubblechart(ola, size) {
                 var widthBox = parseFloat($(".Teamlabel").css("width"));
                 $(".Teamlabel").css("left", "30%");
                 $(".Teamlabel").css("margin-left", -(widthBox/2));
+                $("#nameofteam").val(d.NAME);
+                gen_radarchart(); 
               }else{
                 $(".Teamlabel").html(d.NAME);
                 var widthBox = parseFloat($(".Teamlabel").css("width"));
                 $(".Teamlabel").css("left", "30%");
                 $(".Teamlabel").css("margin-left", -(widthBox/2));
+                $("#nameofteam").val(d.NAME);
+                gen_radarchart();
               }
             }else if(BallClick == 0){
               $(".Teamlabel").html(d.NAME);
               var widthBox = parseFloat($(".Teamlabel").css("width"));
               $(".Teamlabel").css("left", "30%");
               $(".Teamlabel").css("margin-left", -(widthBox/2));
+              $("#nameofteam").val(d.NAME);
+              gen_radarchart();
             }
       })
       .on("mouseleave", function(d){

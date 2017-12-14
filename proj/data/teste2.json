@@ -1,8 +1,19 @@
 [
-    [
-      {"area": "Kills", "value": 80},
-      {"area": "Deaths", "value": 40},
-      {"area": "Losses", "value": 40},
-      {"area": "Wins", "value": 90}
-  	]
-  ]
+	{
+		"key": "The Titans",
+		"values":[
+	     	{"axis": "Kills", "value": 80},
+	      	{"axis": "Deaths", "value": 40},
+	      	{"axis": "Losses", "value": 40},
+	      	{"axis": "Wins", "value": 90}
+	  	]
+	},{
+		"key": "r4v",
+		"values":[
+	     	{"axis": "Kills", "value": 40},
+	      	{"axis": "Deaths", "value": 60},
+	      	{"axis": "Losses", "value": 34},
+	      	{"axis": "Wins", "value": 50}
+	  	]
+	}
+]
