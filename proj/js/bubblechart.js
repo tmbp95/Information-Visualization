@@ -35,6 +35,7 @@ dispatch4.on("BallClick.bubblechart", function(data){
     var lossesinput = $("#lossesinput").prop('checked');
     var winsinput = $("#winsinput").prop('checked');
     gen_radarchart();
+    gen_barchart();
   }else{
     selectedBall = d3.select("circle[title=\'"+clickedBall+"\'");
     selectedBall.transition();
@@ -57,6 +58,7 @@ dispatch4.on("BallClick.bubblechart", function(data){
     var lossesinput = $("#lossesinput").prop('checked');
     var winsinput = $("#winsinput").prop('checked');
     gen_radarchart();
+    gen_barchart();
   }
 })
 
@@ -147,6 +149,7 @@ function gen_bubblechart(ola, size) {
              var widthBox = parseFloat($(".Teamlabel").css("width"));
              $(".Teamlabel").css("left", "30%");
             $(".Teamlabel").css("margin-left", -(widthBox/2));
+            $("#legenda1").html(d.NAME.substring(0,9));
               return "#41848b";
 
             }else if(d.Ranking==2){
@@ -172,7 +175,8 @@ function gen_bubblechart(ola, size) {
             .duration(200)
             .style("opacity", .9);
         div.html("<strong>Team:</strong> <span style='color:white'>" + d.NAME + "</span><br>" + 
-                 "<strong>Rating:</strong> <span style='color:white'>" + d.Rating + "</span>")
+                 "<strong>Rating:</strong> <span style='color:white'>" + d.Rating + "</span><br>" + 
+                 "<strong>Prize:</strong> <span style='color:white'>" + d.Prize + "€</span>")
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY - 52) + "px");
 
@@ -182,23 +186,30 @@ function gen_bubblechart(ola, size) {
                 var widthBox = parseFloat($(".Teamlabel").css("width"));
                 $(".Teamlabel").css("left", "30%");
                 $(".Teamlabel").css("margin-left", -(widthBox/2));
+                $("#legenda1").html(clickedBall.substring(0,9));
+                $("#legenda2").html(d.NAME.substring(0,9));
                 $("#nameofteam").val(d.NAME);
                 gen_radarchart(); 
+                gen_barchart();
               }else{
                 $(".Teamlabel").html(d.NAME);
                 var widthBox = parseFloat($(".Teamlabel").css("width"));
                 $(".Teamlabel").css("left", "30%");
                 $(".Teamlabel").css("margin-left", -(widthBox/2));
+                $("#legenda1").html(d.NAME.substring(0,9));
                 $("#nameofteam").val(d.NAME);
                 gen_radarchart();
+                gen_barchart();
               }
             }else if(BallClick == 0){
               $(".Teamlabel").html(d.NAME);
               var widthBox = parseFloat($(".Teamlabel").css("width"));
               $(".Teamlabel").css("left", "30%");
               $(".Teamlabel").css("margin-left", -(widthBox/2));
+              $("#legenda1").html(d.NAME.substring(0,9));
               $("#nameofteam").val(d.NAME);
               gen_radarchart();
+              gen_barchart();
             }
       })
       .on("mouseleave", function(d){

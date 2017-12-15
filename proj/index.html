@@ -46,7 +46,18 @@
 							    	</span>
 							    </div><!-- /input-group -->
 							</div>
-							<div id="calendar"></div>
+
+							<div id="calendar">
+								<div id="daysofweek">
+									<div id="eachweekday">S</div>
+									<div id="eachweekday">M</div>
+									<div id="eachweekday">T</div>
+									<div id="eachweekday">W</div>
+									<div id="eachweekday">T</div>
+									<div id="eachweekday">F</div>
+									<div id="eachweekday">S</div>
+								</div>
+							</div>
 
 						</div>	
 						<div style="clear:both"></div>
@@ -120,6 +131,11 @@
 							<label style="font-size:1.0em;position:relative;top:-18px;margin-left:46px;">Maps (Sides Win Percentage)</label>
 							
 							<div id="barchartBox">
+								<div id="legendas">
+									<div id="legenda1">Team 1</div>
+									<div id="legenda2">Team 2</div>
+								</div>
+
 								<div id="barchart"></div>
 								<div id="mapsSelection">
 									<div id="imagemMap">
@@ -202,7 +218,7 @@
 					<div id="paineldir_box1" class="barcharttBOX" style="display:none;margin-top:5px;">
 						<br>
 						<div id="topPlayers">
-							<h4 style="margin-left:20px;margin-top:-4px;float:left;">Players in <font id="teamsfont"></font></h4>
+							<h4 style="margin-left:20px;margin-top:-4px;float:left;">Players in - <font id="teamsfont"></font> - Team</h4>
 							<div class="input-group" style="margin-right:20px;margin-top:-5px;width:180px;float:right;">
 							    <input type="search" class="form-control autocompletePlayers" placeholder="Search for a Player" id="autocomplete" style="height:25px;font-size:12px;width:180px;">
 							    <span class="input-group-btn">
@@ -210,8 +226,12 @@
 							    </span>
 							</div><!-- /input-group -->
 							<div style="clear:both"></div>
-							<div id="horizbarchart"></div>
+							<div id="horizbarchart">
+								<input type="hidden" id="nameofplayer">
+							</div>
 							<div id="radarchart2" style="width:275px;">
+								<label style="font-size:1.0em;position:relative;top:-18px;width:108px;left:50%;margin-left:-54px;">Stats for Player <br></label>
+								<label style="font-size:1.0em;position:relative;" class="Playerlabel"></label>
 								<div id="radarchartPlayers">
 									
 								</div>
@@ -263,7 +283,7 @@
 				</div>
 			</div>
 		</div>
-		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+		<script src="js/d3-scale-chromatic.v1.min.js"></script>
 		<script src="js/heatmap.js"></script>
 		<script src="js/d3-tip.js"></script>
 		<script src="js/scatterplot.js"></script>

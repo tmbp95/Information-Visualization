@@ -120,6 +120,30 @@ div.tooltip {
   pointer-events: none;
 }
 
+.legend2{
+  position:relative;
+  top:40px;
+}
+
+#legendas{
+  position:relative;
+  z-index:222;
+  width: 50px;
+  float:right;
+  top:85px;
+  left:8px;
+  margin-top:-70px;
+}
+
+#legenda1{
+  font-size:0.8em;
+}
+#legenda2{
+  font-size:0.8em;
+  margin-top:40px;
+}
+ 
+
 div.tooltip2 { 
   margin-left:2px;
   margin-top:-35px;
@@ -152,6 +176,7 @@ div.tooltip3{
   color:#71e7f4;
   border: 0px;
   border-radius:5px;
+  pointer-events: none;
 }
 div.tooltip5{ 
   margin-left:3px;
@@ -159,7 +184,7 @@ div.tooltip5{
   position: absolute;
   text-align: left;
   min-width: 60px;
-  min-height: 40px;
+  min-height: 10px;
   height:auto;
   max-width:380px;
   padding: 4px;
@@ -168,8 +193,41 @@ div.tooltip5{
   color:#71e7f4;
   border: 0px;
   border-radius:5px;
+  pointer-events: none;
+}
+.radarInvisibleCircle{
+  cursor:default;
+
+}
+div.tooltip6{ 
+  margin-left:3px;
+  margin-top:-5px;
+  position: absolute;
+  text-align: left;
+  min-width: 20px;
+  padding: 4px;
+  font: 12px sans-serif;
+  background: #1f1f1f;
+  color:#71e7f4;
+  border: 0px;
+  border-radius:5px;
+  pointer-events: none;
 }
 
+#daysofweek{
+  width:10px;
+  height:110px;
+  position:relative;
+  float:left;
+    margin-right:3px;
+
+}
+#eachweekday{
+  width:10px;
+  height:13.5px;
+  margin-top:2.5px;
+  font-size:8px;
+}
 #calendar {
   margin-left: 10px;
   margin-top: 10px;
@@ -188,7 +246,7 @@ div.tooltip5{
 }
 .month-name {
   font-size: 85%;
-  fill: #777;
+  fill: #000;
   font-family: Arial, Helvetica;
 }
 .day{
@@ -274,7 +332,6 @@ div.tooltip5{
 }
 
 #radarchartPlayers{
-  margin-left:15px;
   margin-bottom: 10px;
   height:150px;
 }
@@ -302,6 +359,35 @@ div.tooltip5{
   fill:#6d6E70;
 }
 
+.bar{
+  position:relative;
+  z-index:9;
+}
+
+.stop-left {
+  stop-color: red;  /* Indigo */
+}
+
+.stop-right {
+  stop-color: #ffeb09;  /* Teal */
+}
+
+.stop-left2 {
+  stop-color: #ffeb09;  /* Indigo */
+}
+
+.stop-right2 {
+  stop-color: green;  /* Teal */
+}
+
+.filled {
+  fill: url(#mainGradient);
+}
+
+.filled2 {
+  fill: url(#mainGradient2);
+}
+
 #mapsSelection{
   width:270px;
   height:110px;
@@ -316,6 +402,11 @@ div.tooltip5{
   width:80px;
   display: inline-block;
 }
+
+    
+
+      
+
   
   .toolTip {
   pointer-events: none;
@@ -351,9 +442,11 @@ div.tooltip5{
 #horizbarchart{
   margin-left:10px;
   margin-bottom: 10px;
+  margin-top:40px;
   position:relative;
   float:left;
   border-radius:0px;
+  margin-right:10px;
 }
 
 

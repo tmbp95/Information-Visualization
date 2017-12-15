@@ -1,239 +1,380 @@
-function gen_radarchartPlayers() {
-var width = 120,
-    height = 120;
+/////////////////////////////////////////////////////////
+/////////////// The Radar Chart Function ////////////////
+/////////////// Written by Nadieh Bremer ////////////////
+////////////////// VisualCinnamon.com ///////////////////
+/////////// Inspired by the code of alangrafu ///////////
+/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////// 
+      //////////////////////// Set-Up ////////////////////////////// 
+      ////////////////////////////////////////////////////////////// 
+function gen_radarchartPlayers(){
+  var killsinput2 = $("#killsinput2").prop('checked');
+  var deathsinput2 = $("#deathsinput2").prop('checked');
+  var lossesinput2 = $("#lossesinput2").prop('checked');
+  var winsinput2 = $("#winsinput2").prop('checked');
 
-// Config for the Radar chart
-var config = {
-    w: width,
-    h: height,
-    maxValue: 100,
-    levels: 5,
-    ExtraWidthX: 150
+      var margin = {top: 40, right: 40, bottom: 90, left: 50},
+        width = 260 - margin.left - margin.right,
+        height = 260 - margin.top - margin.bottom;
+          
+      ////////////////////////////////////////////////////////////// 
+      //////////////////// Draw the Chart ////////////////////////// 
+      ////////////////////////////////////////////////////////////// 
+      if(BarClick==1){
+        var color = d3.scaleOrdinal()
+        .range(["orange","#52a6af"]);
+      }else{
+        var color = d3.scaleOrdinal()
+        .range(["#52a6af"]);
+      }
+      
+        
+      var radarChartOptions = {
+        w: width,
+        h: height,
+        margin: margin,
+        maxValue: 0.5,
+        levels: 4,
+        roundStrokes: true,
+        color: color
+      };
+
+      //Load the data and Call function to draw the Radar chart
+      d3.json("data/teste5.json", function(error, data){
+        RadarChartPlayers("#radarchartPlayers", data, radarChartOptions);
+      });
 }
+function RadarChartPlayers(id, data, options) {
+  console.log(data)
+  var tempClickedBar = $("#nameofplayer").val();
+  var killsinput2 = $("#killsinput2").prop('checked');
+  var deathsinput2 = $("#deathsinput2").prop('checked');
+  var lossesinput2 = $("#lossesinput2").prop('checked');
+  var winsinput2 = $("#winsinput2").prop('checked');
 
-//Call function to draw the Radar chart
-d3.json("data/teste5.json", function(error, data) {
-    
-     if (error) throw error;
-    console.log(data);
-    var arrayAxis = [];
-    var arrayAxis2 = [];
-    for(i=0;i<data[0].length;i++){
-      console.log(data[0][i].area)
-      if(data[0][i].area == "Kills" && killsinput2===true){
-        arrayAxis2.push(data[0][i]);
+  var vectorvalue = [];
+  var vector = data;
+  for(i=0;i<data.length;i++){
+    for(j=0;j<data[i].values.length;j++){
+      var value = data[i].values[j];
+      if(value.axis == "Kills" && killsinput2 === true){
+        vectorvalue.push(value);
       }
-      if(data[0][i].area == "Deaths" && deathsinput2===true){
-        arrayAxis2.push(data[0][i]);
+       if(value.axis == "Deaths" && deathsinput2 === true){
+        vectorvalue.push(value);
       }
-      if(data[0][i].area == "Losses" && lossesinput2===true){
-        arrayAxis2.push(data[0][i]);
+       if(value.axis == "Losses" && lossesinput2 === true){
+        vectorvalue.push(value);
       }
-      if(data[0][i].area == "Wins" && winsinput2===true){
-        arrayAxis2.push(data[0][i]);
+       if(value.axis == "Wins" && winsinput2 === true){
+        vectorvalue.push(value);
       }
     }
-    arrayAxis.push(arrayAxis2);
-    console.log(arrayAxis)
-    RadarChart.draw("#radarchartPlayers", arrayAxis, config);
-});
+    vector[i].values = vectorvalue;
+    vectorvalue = [];
+  }
+  
+  var arrayData = [];
+  for(i=0;i<vector.length;i++){
+    console.log(vector[i].key,vector[i].key.length,tempClickedBar,tempClickedBar.length, vector[i].key == tempClickedBar)
+    if(vector[i].key == tempClickedBar){
+      console.log("entrey")
+      arrayData.push(vector[i]);
+    }
+    if(clickedBar!=null){
+      if(vector[i].key == clickedBar && vector[i].key != tempClickedBar){
+        arrayData.push(vector[i]);
+      }
+    }
+  }
+  console.log("arrayData",arrayData)
 
-var svg = d3.select('body')
-  .selectAll('svg')
-  .append('svg')
-  .attr("width", width)
-  .attr("height", height);
+  
+  setTimeout(function(){
+    data = arrayData;
 
-var RadarChart = {
-  draw: function(id, d, options){
     var cfg = {
-     radius: 5,
-     w: 145,
-     h: 150,
-     factor: 1,
-     factorLegend: .85,
-     levels: 3,
-     maxValue: 0,
-     radians: 2 * Math.PI,
-     opacityArea: 0.5,
-     ToRight: 5,
-     TranslateX: 70,
-     TranslateY: 30,
-     ExtraWidthX: 100,
-     ExtraWidthY: 60,
-     color: d3.scaleOrdinal().range(["#52a6af", "#CA0D59"])
+     maxValue: 0,         //What is the value that the biggest circle will represent
+     labelFactor: 1.25,       //How much farther than the radius of the outer circle should the labels be placed
+     wrapWidth: 60,       //The number of pixels after which a label needs to be given a new line
+     opacityArea: 0.35,       //The opacity of the area of the blob
+     dotRadius: 3,        //The size of the colored circles of each blog
+     opacityCircles: 0.1,       //The opacity of the circles of each blob
+     strokeWidth: 1.5,      //The width of the stroke around each blob
+     roundStrokes: false,     //If true the area and stroke will follow a round path (cardinal-closed)
     };
-	
+    
+    //Put all of the options into a variable called cfg
     if('undefined' !== typeof options){
       for(var i in options){
-      if('undefined' !== typeof options[i]){
-        cfg[i] = options[i];
-      }
-      }
-    }
+      if('undefined' !== typeof options[i]){ cfg[i] = options[i]; }
+      }//for i
+    }//if
     
-    cfg.maxValue = 100;
+    // convert the nested data passed in
+    // into an array of values arrays
+    data = data.map(function(d) { return d.values })
+
+    //If the supplied maxValue is smaller than the actual one, replace by the max in the data
+    var maxValue = 100;
+      
+    var allAxis = (data[0].map(function(i, j){return i.axis})), //Names of each axis
+      total = allAxis.length,         //The number of different axes
+      radius = Math.min(cfg.w/2, cfg.h/2),      //Radius of the outermost circle
+      Format = d3.format(''),        //Percentage formatting
+      angleSlice = Math.PI * 2 / total;     //The width in radians of each "slice"
     
-    var allAxis = (d[0].map(function(i, j){return i.area}));
-    var total = allAxis.length;
-    var radius = cfg.factor*Math.min(cfg.w/2, cfg.h/2);
-    var Format = d3.format('%');
+    //Scale for the radius
+    var rScale = d3.scaleLinear()
+      .range([0, radius])
+      .domain([0, maxValue]);
+      
+    /////////////////////////////////////////////////////////
+    //////////// Create the container SVG and g /////////////
+    /////////////////////////////////////////////////////////
+
+    //Remove whatever chart with the same id/class was present before
     d3.select(id).select("svg").remove();
+    
+    //Initiate the radar chart SVG
+    var svg = d3.select(id).append("svg")
+        .attr("width",  cfg.w + cfg.margin.left + cfg.margin.right)
+        .attr("height", cfg.h + cfg.margin.top + cfg.margin.bottom)
+        .attr("class", "radar"+id);
 
-    var g = d3.select(id)
-        .append("svg")
-        .attr("width", cfg.w+cfg.ExtraWidthX)
-        .attr("height", cfg.h+cfg.ExtraWidthY)
-        .append("g")
-        .attr("transform", "translate(" + cfg.TranslateX + "," + cfg.TranslateY + ")");
+    var div = d3.select("body").append("div")
+    .attr("class", "tooltip6")
+    .style("opacity", 0);
 
-		var tooltip;
-	
-    //Circular segments
-    for(var j=0; j<cfg.levels; j++){
-      var levelFactor = cfg.factor*radius*((j+1)/cfg.levels);
-      g.selectAll(".levels")
-       .data(allAxis)
+    //Append a g element    
+    var g = svg.append("g")
+        .attr("transform", "translate(" + (cfg.w/2 + cfg.margin.left) + "," + (cfg.h/2 + cfg.margin.top) + ")");
+    
+    /////////////////////////////////////////////////////////
+    ////////// Glow filter for some extra pizzazz ///////////
+    /////////////////////////////////////////////////////////
+    
+    //Filter for the outside glow
+    var filter = g.append('defs').append('filter').attr('id','glow'),
+      feGaussianBlur = filter.append('feGaussianBlur').attr('stdDeviation','2.5').attr('result','coloredBlur'),
+      feMerge = filter.append('feMerge'),
+      feMergeNode_1 = feMerge.append('feMergeNode').attr('in','coloredBlur'),
+      feMergeNode_2 = feMerge.append('feMergeNode').attr('in','SourceGraphic');
+
+    /////////////////////////////////////////////////////////
+    /////////////// Draw the Circular grid //////////////////
+    /////////////////////////////////////////////////////////
+    
+    //Wrapper for the grid & axes
+    var axisGrid = g.append("g").attr("class", "axisWrapper");
+    
+    //Draw the background circles
+    axisGrid.selectAll(".levels")
+       .data(d3.range(1,(cfg.levels+1)).reverse())
        .enter()
-       .append("svg:line")
-       .attr("x1", function(d, i){return levelFactor*(1-cfg.factor*Math.sin(i*cfg.radians/total));})
-       .attr("y1", function(d, i){return levelFactor*(1-cfg.factor*Math.cos(i*cfg.radians/total));})
-       .attr("x2", function(d, i){return levelFactor*(1-cfg.factor*Math.sin((i+1)*cfg.radians/total));})
-       .attr("y2", function(d, i){return levelFactor*(1-cfg.factor*Math.cos((i+1)*cfg.radians/total));})
-       .attr("class", "line")
-       .style("stroke", "grey")
-       .style("stroke-opacity", "0.75")
-       .style("stroke-width", "0.3px")
-       .attr("transform", "translate(" + (cfg.w/2-levelFactor) + ", " + (cfg.h/2-levelFactor) + ")");
-    }
+      .append("circle")
+      .attr("class", "gridCircle")
+      .attr("r", function(d, i){return radius/cfg.levels*d;})
+      .style("fill", "#CDCDCD")
+      .style("stroke", "#CDCDCD")
+      .style("fill-opacity", cfg.opacityCircles)
+      .style("filter" , "url(#glow)");
 
     //Text indicating at what % each level is
-    for(var j=0; j<cfg.levels; j++){
-      var levelFactor = cfg.factor*radius*((j+1)/cfg.levels);
-      g.selectAll(".levels")
-       .data([1]) //dummy data
-       .enter()
-       .append("svg:text")
-       .attr("x", function(d){return levelFactor*(1-cfg.factor*Math.sin(0));})
-       .attr("y", function(d){return levelFactor*(1-cfg.factor*Math.cos(0));})
-       .attr("class", "legend")
-       .style("font-family", "sans-serif")
+    axisGrid.selectAll(".axisLabel")
+       .data(d3.range(1,(cfg.levels+1)).reverse())
+       .enter().append("text")
+       .attr("class", "axisLabel")
+       .attr("x", 4)
+       .attr("y", function(d){return -d*radius/cfg.levels;})
+       .attr("dy", "0.4em")
        .style("font-size", "10px")
-       .attr("transform", "translate(" + (cfg.w/2-levelFactor + cfg.ToRight) + ", " + (cfg.h/2-levelFactor) + ")")
-       .attr("fill", "#737373")
-       .text((j+1)*100/cfg.levels);
-    }
+       .attr("fill", "black")
+       .text(function(d,i) { return Format(maxValue * d/cfg.levels); });
 
-    series = 0;
-
-    var axis = g.selectAll(".axis")
-        .data(allAxis)
-        .enter()
-        .append("g")
-        .attr("class", "axis");
-
+    /////////////////////////////////////////////////////////
+    //////////////////// Draw the axes //////////////////////
+    /////////////////////////////////////////////////////////
+    
+    //Create the straight lines radiating outward from the center
+    var axis = axisGrid.selectAll(".axis")
+      .data(allAxis)
+      .enter()
+      .append("g")
+      .attr("class", "axis");
+    //Append the lines
     axis.append("line")
-      .attr("x1", cfg.w/2)
-      .attr("y1", cfg.h/2)
-      .attr("x2", function(d, i){return cfg.w/2*(1-cfg.factor*Math.sin(i*cfg.radians/total));})
-      .attr("y2", function(d, i){return cfg.h/2*(1-cfg.factor*Math.cos(i*cfg.radians/total));})
+      .attr("x1", 0)
+      .attr("y1", 0)
+      .attr("x2", function(d, i){ return rScale(maxValue*1.1) * Math.cos(angleSlice*i); })
+      .attr("y2", function(d, i){ return rScale(maxValue*1.1) * Math.sin(angleSlice*i); })
       .attr("class", "line")
-      .style("stroke", "grey")
-      .style("stroke-width", "1px");
+      .style("stroke", "white")
+      .style("stroke-width", "2px");
 
+    //Append the labels at each axis
     axis.append("text")
       .attr("class", "legend")
-      .text(function(d){return d})
-      .style("font-family", "sans-serif")
       .style("font-size", "11px")
       .attr("text-anchor", "middle")
-      .attr("dy", "1.5em")
-      .attr("transform", function(d, i){return "translate(0, -10)"})
-      .attr("x", function(d, i){return cfg.w/2*(1-cfg.factorLegend*Math.sin(i*cfg.radians/total))-60*Math.sin(i*cfg.radians/total);})
-      .attr("y", function(d, i){return cfg.h/2*(1-Math.cos(i*cfg.radians/total))-20*Math.cos(i*cfg.radians/total);});
+      .attr("dy", "0.35em")
+      .attr("x", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2); })
+      .attr("y", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice*i - Math.PI/2); })
+      .text(function(d){return d})
+      .call(wrap, cfg.wrapWidth);
 
- 
-    d.forEach(function(y, x){
-      dataValues = [];
-      g.selectAll(".nodes")
-      .data(y, function(j, i){
-        dataValues.push([
-        cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total)), 
-        cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(i*cfg.radians/total))
-        ]);
-      });
-      dataValues.push(dataValues[0]);
-      g.selectAll(".area")
-             .data([dataValues])
-             .enter()
-             .append("polygon")
-             .attr("class", "radar-chart-serie"+series)
-             .style("stroke-width", "2px")
-             .style("stroke", cfg.color(series))
-             .attr("points",function(d) {
-               var str="";
-               for(var pti=0;pti<d.length;pti++){
-                 str=str+d[pti][0]+","+d[pti][1]+" ";
-               }
-               return str;
-              })
-             .style("fill", function(j, i){return cfg.color(series)})
-             .style("fill-opacity", cfg.opacityArea)
-             .on('mouseover', function (d){
-                      z = "polygon."+d3.select(this).attr("class");
-                      g.selectAll("polygon")
-                       .transition(200)
-                       .style("fill-opacity", 0.1); 
-                      g.selectAll(z)
-                       .transition(200)
-                       .style("fill-opacity", .7);
-                      })
-             .on('mouseout', function(){
-                      g.selectAll("polygon")
-                       .transition(200)
-                       .style("fill-opacity", cfg.opacityArea);
-             });
-      series++;
-    });
-    series=0;
-
-
-var tooltip = d3.select("body").append("div").attr("class", "toolTip");
-    d.forEach(function(y, x){
-      g.selectAll(".nodes")
-      .data(y).enter()
-      .append("svg:circle")
-      .attr("class", "radar-chart-serie"+series)
-      .attr('r', cfg.radius)
-      .attr("alt", function(j){return Math.max(j.value, 0)})
-      .attr("cx", function(j, i){
-        dataValues.push([
-        cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total)), 
-        cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(i*cfg.radians/total))
-      ]);
-      return cfg.w/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total));
-      })
-      .attr("cy", function(j, i){
-        return cfg.h/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.cos(i*cfg.radians/total));
-      })
-      .attr("data-id", function(j){return j.area})
-      .style("fill", "#fff")
-      .style("stroke-width", "2px")
-      .style("stroke", cfg.color(series)).style("fill-opacity", .9)
-      .on('mouseover', function (d){
-            tooltip
-              .style("left", d3.event.pageX - 40 + "px")
-              .style("top", d3.event.pageY - 80 + "px")
-              .style("display", "inline-block")
-      				.html((d.area) + "<br><span>" + (d.value) + "</span>");
-            })
-    		.on("mouseout", function(d){ tooltip.style("display", "none");});
-
-      series++;
-    });
+    /////////////////////////////////////////////////////////
+    ///////////// Draw the radar chart blobs ////////////////
+    /////////////////////////////////////////////////////////
+    
+    //The radial line function
+    var radarLine = d3.radialLine()
+      .curve(d3.curveLinearClosed)
+      .radius(function(d) { return rScale(d.value); })
+      .angle(function(d,i) {  return i*angleSlice; });
+      
+    if(cfg.roundStrokes) {
+      radarLine.curve(d3.curveCardinalClosed);
     }
-};
-}
+          
+    //Create a wrapper for the blobs  
+    var blobWrapper = g.selectAll(".radarWrapper")
+      .data(data)
+      .enter().append("g")
+      .attr("class", "radarWrapper");
+        
+    //Append the backgrounds  
+    blobWrapper
+      .append("path")
+      .attr("class", "radarArea2")
+      .attr("d", function(d,i) { return radarLine(d); })
+      .style("fill", function(d,i) { 
+        if(BarClick==1){
+          if(clickedBar == arrayData[i].key){
+            return "orange";
+          }else{
+            return "#52a6af";
+          }
+        }
+        return "#52a6af"; 
+      })
+      .style("fill-opacity", cfg.opacityArea)
+      .on('mouseover', function (d,i){
+        //Dim all blobs
+        d3.selectAll(".radarArea2")
+          .transition().duration(200)
+          .style("fill-opacity", 0.1); 
+        //Bring back the hovered over blob
+        d3.select(this)
+          .transition().duration(200)
+          .style("fill-opacity", 0.7);  
+      })
+      .on('mouseout', function(){
+        //Bring back all blobs
+        d3.selectAll(".radarArea2")
+          .transition().duration(200)
+          .style("fill-opacity", cfg.opacityArea);
+      });
+      
+    //Create the outlines 
+    blobWrapper.append("path")
+      .attr("class", "radarStroke")
+      .attr("d", function(d,i) { return radarLine(d); })
+      .style("stroke-width", cfg.strokeWidth + "px")
+      .style("stroke", function(d,i) { 
+        if(BarClick==1){
+          if(clickedBar == arrayData[i].key){
+            return "orange";
+          }else{
+            return "#52a6af";
+          }
+        }
+        return "#52a6af"; 
+      })
+      .style("fill", "none")
+      .style("filter" , "url(#glow)");    
+    
+    //Append the circles
+    blobWrapper.selectAll(".radarCircle")
+      .data(function(d,i) { return d; })
+      .enter().append("circle")
+      .attr("class", "radarCircle")
+      .attr("r", cfg.dotRadius)
+      .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
+      .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
+      .style("fill", function(d,i,j) { 
+         return "grey";
+      })
+      .style("fill-opacity", 0.8);
+
+    /////////////////////////////////////////////////////////
+    //////// Append invisible circles for tooltip ///////////
+    /////////////////////////////////////////////////////////
+    
+    //Wrapper for the invisible circles on top
+    var blobCircleWrapper = g.selectAll(".radarCircleWrapper")
+      .data(data)
+      .enter().append("g")
+      .attr("class", "radarCircleWrapper");
+      
+    //Append a set of invisible circles on top for the mouseover pop-up
+    blobCircleWrapper.selectAll(".radarInvisibleCircle")
+      .data(function(d,i) { return d; })
+      .enter().append("circle")
+      .attr("class", "radarInvisibleCircle")
+      .attr("r", cfg.dotRadius*1.5)
+      .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
+      .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
+      .style("fill", "none")
+      .style("pointer-events", "all")
+      .on("mouseover", function(d){
+        div.transition()
+            .duration(200)
+            .style("opacity", .9);
+        div.html("<strong>" + d.axis + ":</strong> <span style='color:white'>" + d.value + "</span><br>")
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 22) + "px");
+      })
+      .on("mouseleave", function(d){
+        div.transition()
+           .duration(500)
+           .style("opacity", 0);
+      })
+      
+    
+    /////////////////////////////////////////////////////////
+    /////////////////// Helper Function /////////////////////
+    /////////////////////////////////////////////////////////
+
+    //Taken from http://bl.ocks.org/mbostock/7555321
+    //Wraps SVG text  
+    function wrap(text, width) {
+      text.each(function() {
+      var text = d3.select(this),
+        words = text.text().split(/\s+/).reverse(),
+        word,
+        line = [],
+        lineNumber = 0,
+        lineHeight = 1.4, // ems
+        y = text.attr("y"),
+        x = text.attr("x"),
+        dy = parseFloat(text.attr("dy")),
+        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+        
+      while (word = words.pop()) {
+        line.push(word);
+        tspan.text(line.join(" "));
+        if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+        }
+      }
+      });
+    }//wrap 
+  }, 200);
+}//RadarChart
 
 var killsinput2 = $("#killsinput2").prop('checked');
 var deathsinput2 = $("#deathsinput2").prop('checked');
@@ -241,20 +382,19 @@ var lossesinput2 = $("#lossesinput2").prop('checked');
 var winsinput2 = $("#winsinput2").prop('checked');
 gen_radarchartPlayers();
 
-$("#killsinput2").change(function () {
-  killsinput2 = $("#killsinput2").prop('checked');
+$("#killsinput2").change(function(){
+  killsinput2 = $("killsinput2").prop('checked');
   gen_radarchartPlayers();
-})
-$("#deathsinput2").on("change", function(){
-  deathsinput2 = $("#deathsinput2").prop('checked');
+});
+$("#deathsinput2").change(function(){
+  deathsinput2 = $("deathsinput2").prop('checked');
   gen_radarchartPlayers();
-})
-$("#lossesinput2").on("change", function(){
-  lossesinput2 = $("#lossesinput2").prop('checked');
+});
+$("#lossesinput2").change(function(){
+  lossesinput2 = $("lossesinput2").prop('checked');
   gen_radarchartPlayers();
-})
-$("#winsinput2").on("change", function(){
-  winsinput2 = $("#winsinput2").prop('checked');
+});
+$("#winsinput2").change(function(){
+  winsinput2 = $("winsinput2").prop('checked');
   gen_radarchartPlayers();
-})
-
+});

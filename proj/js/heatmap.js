@@ -32,12 +32,8 @@ dispatch2.on("squareClick.heatmap", function(data){
 
 function drawCalendar(dateData,id){
   if(id==null){
-    console.log(id);
     id=0;
-  }else{
-    console.log(id);
   }
-
   var weeksInMonth = function(month){
     var m = d3.timeMonth.floor(month)
     return d3.timeWeeks(d3.timeWeek.floor(m), d3.timeMonth.offset(m,1)).length;
@@ -257,7 +253,9 @@ function drawCalendar(dateData,id){
       var lookupEventsByIDandNameResult = lookupEventsByIDandName[d];
       var lookupEventsByIDandNameResultString = "";
       if(lookupEventsByIDandNameResult==null){
-        lookupEventsByIDandNameResultString = "empty<br>";
+        lookupEventsByIDandNameResultString = "No tournaments<br>";
+        $("#divInfoHeatmap").show();
+      $("#InfoHeatmap").html("Date: " + d+"<br>"+lookupEventsByIDandNameResultString+"<br>");
       }else{
         lengthList = lookupEventsByIDandNameResult.length;
         EventsID = lookupEventsByIDandNameResult.slice(0,lengthList/2);
@@ -268,9 +266,10 @@ function drawCalendar(dateData,id){
           lookupEventsByIDandNameResultString = lookupEventsByIDandNameResultString + '&nbsp&nbsp- <a href="#" onclick="teste(' + EventsID[count] + ',\'' + name + '\')" style="font-size:12px;">' + d + '</a><br>'; 
           count++;
         });
+        $("#divInfoHeatmap").show();
+          $("#InfoHeatmap").html("Date: " + d+"<br><text id='tournamentsstrong'>Tournaments:</text><br>"+lookupEventsByIDandNameResultString+"<br>");
       }
-      $("#divInfoHeatmap").show();
-      $("#InfoHeatmap").html("Date: " + d+"<br>Tournaments:<br>"+lookupEventsByIDandNameResultString+"<br>");
+      
     })
     .datum(format);
 
