@@ -7,7 +7,8 @@
 ////////////////////////////////////////////////////////////// 
       //////////////////////// Set-Up ////////////////////////////// 
       ////////////////////////////////////////////////////////////// 
-function gen_radarchartPlayers(){
+function gen_radarchartPlayers(ola){
+  var idTournament = ola;
   var killsinput2 = $("#killsinput2").prop('checked');
   var deathsinput2 = $("#deathsinput2").prop('checked');
   var lossesinput2 = $("#lossesinput2").prop('checked');
@@ -41,11 +42,10 @@ function gen_radarchartPlayers(){
 
       //Load the data and Call function to draw the Radar chart
       d3.json("data/teste5.json", function(error, data){
-        RadarChartPlayers("#radarchartPlayers", data, radarChartOptions);
+        RadarChartPlayers("#radarchartPlayers", data, radarChartOptions, idTournament);
       });
 }
-function RadarChartPlayers(id, data, options) {
-  console.log(data)
+function RadarChartPlayers(id, data, options, idTournament) {
   var tempClickedBar = $("#nameofplayer").val();
   var killsinput2 = $("#killsinput2").prop('checked');
   var deathsinput2 = $("#deathsinput2").prop('checked');
@@ -76,18 +76,16 @@ function RadarChartPlayers(id, data, options) {
   
   var arrayData = [];
   for(i=0;i<vector.length;i++){
-    console.log(vector[i].key,vector[i].key.length,tempClickedBar,tempClickedBar.length, vector[i].key == tempClickedBar)
-    if(vector[i].key == tempClickedBar){
-      console.log("entrey")
+    console.log(idTournament)
+    if(vector[i].key == tempClickedBar && vector[i].tournament == idTournament){
       arrayData.push(vector[i]);
     }
     if(clickedBar!=null){
-      if(vector[i].key == clickedBar && vector[i].key != tempClickedBar){
+      if(vector[i].key == clickedBar && vector[i].key != tempClickedBar && vector[i].tournament == idTournament){
         arrayData.push(vector[i]);
       }
     }
   }
-  console.log("arrayData",arrayData)
 
   
   setTimeout(function(){
@@ -376,25 +374,19 @@ function RadarChartPlayers(id, data, options) {
   }, 200);
 }//RadarChart
 
-var killsinput2 = $("#killsinput2").prop('checked');
-var deathsinput2 = $("#deathsinput2").prop('checked');
-var lossesinput2 = $("#lossesinput2").prop('checked');
-var winsinput2 = $("#winsinput2").prop('checked');
-gen_radarchartPlayers();
-
 $("#killsinput2").change(function(){
   killsinput2 = $("killsinput2").prop('checked');
-  gen_radarchartPlayers();
+  gen_radarchartPlayers(idTournament);
 });
 $("#deathsinput2").change(function(){
   deathsinput2 = $("deathsinput2").prop('checked');
-  gen_radarchartPlayers();
+  gen_radarchartPlayers(idTournament);
 });
 $("#lossesinput2").change(function(){
   lossesinput2 = $("lossesinput2").prop('checked');
-  gen_radarchartPlayers();
+  gen_radarchartPlayers(idTournament);
 });
 $("#winsinput2").change(function(){
   winsinput2 = $("winsinput2").prop('checked');
-  gen_radarchartPlayers();
+  gen_radarchartPlayers(idTournament);
 });

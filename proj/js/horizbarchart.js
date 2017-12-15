@@ -22,7 +22,7 @@ dispatch9.on("BarClick.barchart", function(data){
     var deathsinput = $("#deathsinput").prop('checked');
     var lossesinput = $("#lossesinput").prop('checked');
     var winsinput = $("#winsinput").prop('checked');
-    gen_radarchartPlayers();
+    gen_radarchartPlayers(idTournament);
   }else{
     selectedBar = d3.select("rect[title=\'"+clickedBar+"\'");
     selectedBar.transition();
@@ -41,12 +41,12 @@ dispatch9.on("BarClick.barchart", function(data){
     var deathsinput2 = $("#deathsinput2").prop('checked');
     var lossesinput2 = $("#lossesinput2").prop('checked');
     var winsinput2 = $("#winsinput2").prop('checked');
-    gen_radarchartPlayers();
+    gen_radarchartPlayers(idTournament);
   }
 })
 
-function gen_horizbarchart(name) {
-
+function gen_horizbarchart(name,ola) {
+var idTournament = ola;
 $("#teamsfont").html(name);
 var margin = {top: 10, right: 11, bottom: 55, left: 30},
       width = 280 - margin.left - margin.right,
@@ -76,7 +76,7 @@ d3.json("data/teste4.json", function(error, data) {
     var vectorData = [];
     var average = 0;
     for(i=0;i<data.length;i++){
-      if(data[i].team == name){
+      if(data[i].team == name && data[i].tournament == idTournament){
         vectorData.push(data[i]);
         average += data[i].rating;
       }
@@ -206,7 +206,7 @@ d3.json("data/teste4.json", function(error, data) {
                 $("#legenda1").html(clickedBar.substring(0,9));
                 $("#legenda2").html(d.name.substring(0,9));
                 $("#nameofplayer").val(d.name);
-                gen_radarchartPlayers(); 
+                gen_radarchartPlayers(idTournament); 
               }else{
                 $(".Playerlabel").html(d.name);
                 var widthBox = parseFloat($(".Playerlabel").css("width"));
@@ -214,7 +214,7 @@ d3.json("data/teste4.json", function(error, data) {
                 $(".Playerlabel").css("margin-left", -(widthBox/2));
                 $("#legenda1").html(d.name.substring(0,9));
                 $("#nameofplayer").val(d.name);
-                gen_radarchartPlayers();
+                gen_radarchartPlayers(idTournament);
               }
             }else if(BarClick == 0){
               $(".Playerlabel").html(d.name);
@@ -223,7 +223,7 @@ d3.json("data/teste4.json", function(error, data) {
               $(".Playerlabel").css("margin-left", -(widthBox/2));
               $("#legenda1").html(d.name.substring(0,9));
               $("#nameofplayer").val(d.name);
-              gen_radarchartPlayers();
+              gen_radarchartPlayers(idTournament);
             }
       })
       .on("mouseleave", function(d){

@@ -7,7 +7,8 @@
 ////////////////////////////////////////////////////////////// 
       //////////////////////// Set-Up ////////////////////////////// 
       ////////////////////////////////////////////////////////////// 
-function gen_radarchart(){
+function gen_radarchart(ola){
+  var idTournament = ola;
   var killsinput = $("#killsinput").prop('checked');
   var deathsinput = $("#deathsinput").prop('checked');
   var lossesinput = $("#lossesinput").prop('checked');
@@ -41,10 +42,10 @@ function gen_radarchart(){
 
       //Load the data and Call function to draw the Radar chart
       d3.json("data/teste2.json", function(error, data){
-        RadarChart("#radarchart", data, radarChartOptions);
+        RadarChart("#radarchart", data, radarChartOptions, idTournament);
       });
 }
-function RadarChart(id, data, options) {
+function RadarChart(id, data, options, idTournament) {
   var tempClickedBall = $("#nameofteam").val();
   var killsinput = $("#killsinput").prop('checked');
   var deathsinput = $("#deathsinput").prop('checked');
@@ -75,11 +76,11 @@ function RadarChart(id, data, options) {
 
   var arrayData = [];
   for(i=0;i<vector.length;i++){
-    if(vector[i].key == tempClickedBall){
+    if(vector[i].key == tempClickedBall && vector[i].tournament == idTournament){
       arrayData.push(vector[i]);
     }
     if(clickedBall!=null){
-      if(vector[i].key == clickedBall && vector[i].key != tempClickedBall){
+      if(vector[i].key == clickedBall && vector[i].tournament == idTournament && vector[i].key != tempClickedBall){
         arrayData.push(vector[i]);
       }
     }
@@ -372,25 +373,22 @@ function RadarChart(id, data, options) {
   }, 200);
 }//RadarChart
 
-var killsinput = $("#killsinput").prop('checked');
-var deathsinput = $("#deathsinput").prop('checked');
-var lossesinput = $("#lossesinput").prop('checked');
-var winsinput = $("#winsinput").prop('checked');
-gen_radarchart();
+
+
 
 $("#killsinput").change(function(){
   killsinput = $("killsinput").prop('checked');
-  gen_radarchart();
+  gen_radarchart(idTournament);
 });
 $("#deathsinput").change(function(){
   deathsinput = $("deathsinput").prop('checked');
-  gen_radarchart();
+  gen_radarchart(idTournament);
 });
 $("#lossesinput").change(function(){
   lossesinput = $("lossesinput").prop('checked');
-  gen_radarchart();
+  gen_radarchart(idTournament);
 });
 $("#winsinput").change(function(){
   winsinput = $("winsinput").prop('checked');
-  gen_radarchart();
+  gen_radarchart(idTournament);
 });

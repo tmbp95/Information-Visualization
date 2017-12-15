@@ -1,4 +1,5 @@
-function gen_barchart() {
+function gen_barchart(ola) {
+  var idTournament = ola;
   $("#legenda2").hide();
   d3.select("#barchart").selectAll("svg").remove();
 var margin = {top: 30, right: 40, bottom: 40, left: 55},
@@ -39,28 +40,28 @@ d3.json("data/teste3.json", function(error, data) {
 
       var arrayAxis = [];
       for(i=0;i<data.length;i++){
-        if(data[i].Map == "Dust2" && checkbox1 === true){
+        if(data[i].Map == "Dust2" && checkbox1 === true && data[i].tournament == idTournament){
           arrayAxis.push(data[i]);
         }
-        if(data[i].Map == "Nuke" && checkbox2 === true){
+        if(data[i].Map == "Nuke" && checkbox2 === true && data[i].tournament == idTournament){
           arrayAxis.push(data[i]);
         }
-        if(data[i].Map == "Mirage" && checkbox3 === true){
+        if(data[i].Map == "Mirage" && checkbox3 === true && data[i].tournament == idTournament){
           arrayAxis.push(data[i]);
         }
-        if(data[i].Map == "Inferno" && checkbox4 === true){
+        if(data[i].Map == "Inferno" && checkbox4 === true && data[i].tournament == idTournament){
           arrayAxis.push(data[i]);
         }
-        if(data[i].Map == "CobStone" && checkbox5 === true){
+        if(data[i].Map == "CobStone" && checkbox5 === true && data[i].tournament == idTournament){
           arrayAxis.push(data[i]);
         }
-        if(data[i].Map == "Cache" && checkbox6 === true){
+        if(data[i].Map == "Cache" && checkbox6 === true && data[i].tournament == idTournament){
           arrayAxis.push(data[i]);
         }
-        if(data[i].Map == "Overpass" && checkbox7 === true){
+        if(data[i].Map == "Overpass" && checkbox7 === true && data[i].tournament == idTournament){
           arrayAxis.push(data[i]);
         }
-        if(data[i].Map == "Tuscan" && checkbox8 === true){
+        if(data[i].Map == "Tuscan" && checkbox8 === true && data[i].tournament == idTournament){
           arrayAxis.push(data[i]);
         }
       }
@@ -347,37 +348,37 @@ var checkbox6 = $("#checkbox6").prop('checked');
 var checkbox7 = $("#checkbox7").prop('checked');
 var checkbox8 = $("#checkbox8").prop('checked');
 
-gen_barchart();
+gen_barchart(idTournament);
 
 $("#checkbox1").on("change", function(){
   checkbox1 = $("#checkbox1").prop('checked');
-  gen_barchart();
+  gen_barchart(idTournament);
 })
 $("#checkbox2").on("change", function(){
   checkbox2 = $("#checkbox2").prop('checked');
-  gen_barchart();
+  gen_barchart(idTournament);
 })
 $("#checkbox3").on("change", function(){
   checkbox3 = $("#checkbox3").prop('checked');
-  gen_barchart();
+  gen_barchart(idTournament);
 })
 $("#checkbox4").on("change", function(){
   checkbox4 = $("#checkbox4").prop('checked');
-  gen_barchart();
+  gen_barchart(idTournament);
 })
 $("#checkbox5").on("change", function(){
   checkbox5 = $("#checkbox5").prop('checked');
-  gen_barchart();
+  gen_barchart(idTournament);
 })
 $("#checkbox6").on("change", function(){
   checkbox6 = $("#checkbox6").prop('checked');
-  gen_barchart();
+  gen_barchart(idTournament);
 })
 $("#checkbox7").on("change", function(){
   checkbox7 = $("#checkbox7").prop('checked');
-  gen_barchart();
+  gen_barchart(idTournament);
 })
 $("#checkbox8").on("change", function(){
   checkbox8 = $("#checkbox8").prop('checked');
-  gen_barchart();
+  gen_barchart(idTournament);
 })

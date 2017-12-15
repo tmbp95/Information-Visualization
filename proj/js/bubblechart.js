@@ -9,12 +9,14 @@ var colorBall,size;
 
 dispatch4.on("BallClick.bubblechart", function(data){
   if(BallClick==0){
-    gen_horizbarchart(data.NAME);
+    gen_horizbarchart(data.NAME, idTournament);
+    gen_radarchartPlayers(idTournament);
     $(".barcharttBOX").slideDown(300);
   }else{
     $(".barcharttBOX").slideUp(300);
     d3.select("#horizbarchart").selectAll("svg").remove();
-    gen_horizbarchart(data.NAME);
+    gen_horizbarchart(data.NAME, idTournament);
+    gen_radarchartPlayers(idTournament);
     $(".barcharttBOX").slideDown(300);
   }
   BallClick = 1;
@@ -34,8 +36,8 @@ dispatch4.on("BallClick.bubblechart", function(data){
     var deathsinput = $("#deathsinput").prop('checked');
     var lossesinput = $("#lossesinput").prop('checked');
     var winsinput = $("#winsinput").prop('checked');
-    gen_radarchart();
-    gen_barchart();
+    gen_radarchart(idTournament);
+    gen_barchart(idTournament);
   }else{
     selectedBall = d3.select("circle[title=\'"+clickedBall+"\'");
     selectedBall.transition();
@@ -57,8 +59,8 @@ dispatch4.on("BallClick.bubblechart", function(data){
     var deathsinput = $("#deathsinput").prop('checked');
     var lossesinput = $("#lossesinput").prop('checked');
     var winsinput = $("#winsinput").prop('checked');
-    gen_radarchart();
-    gen_barchart();
+    gen_radarchart(idTournament);
+    gen_barchart(idTournament);
   }
 })
 
@@ -67,13 +69,17 @@ function teste(data, data2){
   nameTournament = data2;
   $("#tournamentsfont").html(nameTournament);
   if(show==0){
-    gen_bubblechart(nameTournament);
+    gen_bubblechart(idTournament);
+    gen_radarchart(idTournament);
+    gen_barchart(idTournament);
     $(".bubblechartBOX").slideDown(300);
   }else{
     $(".barcharttBOX").slideUp(300);
     $(".bubblechartBOX").slideUp(300);
     d3.select("#bubblechart").selectAll("svg").remove();
-    gen_bubblechart(nameTournament);
+    gen_bubblechart(idTournament);
+    gen_radarchart(idTournament);
+    gen_barchart(idTournament);
     $(".bubblechartBOX").slideDown(300);
   }
 }
@@ -113,10 +119,21 @@ function gen_bubblechart(ola, size) {
   // Get the data
   d3.json("data/teste.json", function(error, data) {
       data.forEach(function(d) {
+          d.Tournament = d.Tournament;
           d.NAME = d.NAME;
           d.Rating = +d.Rating;
           d.Prize = d.Prize;
       });
+
+      var vector = [];
+      for(i=0;i<data.length;i++){
+        console.log(ola)
+        if(data[i].Tournament == ola){
+          vector.push(data[i]);
+        }
+      }
+
+      data = vector;
 
       x.domain(data.map(function(d) { return d.NAME; }));
       y.domain([0, d3.max(data, function(d) { return d.Rating; })+1]);
@@ -189,8 +206,8 @@ function gen_bubblechart(ola, size) {
                 $("#legenda1").html(clickedBall.substring(0,9));
                 $("#legenda2").html(d.NAME.substring(0,9));
                 $("#nameofteam").val(d.NAME);
-                gen_radarchart(); 
-                gen_barchart();
+                gen_radarchart(idTournament); 
+                gen_barchart(idTournament);
               }else{
                 $(".Teamlabel").html(d.NAME);
                 var widthBox = parseFloat($(".Teamlabel").css("width"));
@@ -198,8 +215,8 @@ function gen_bubblechart(ola, size) {
                 $(".Teamlabel").css("margin-left", -(widthBox/2));
                 $("#legenda1").html(d.NAME.substring(0,9));
                 $("#nameofteam").val(d.NAME);
-                gen_radarchart();
-                gen_barchart();
+                gen_radarchart(idTournament);
+                gen_barchart(idTournament);
               }
             }else if(BallClick == 0){
               $(".Teamlabel").html(d.NAME);
@@ -208,8 +225,8 @@ function gen_bubblechart(ola, size) {
               $(".Teamlabel").css("margin-left", -(widthBox/2));
               $("#legenda1").html(d.NAME.substring(0,9));
               $("#nameofteam").val(d.NAME);
-              gen_radarchart();
-              gen_barchart();
+              gen_radarchart(idTournament);
+              gen_barchart(idTournament);
             }
       })
       .on("mouseleave", function(d){
