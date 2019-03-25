@@ -1,0 +1,18 @@
+[
+	{"tournament": 1449, "Map":"Dust2","CT":54,"T":46,"team":"The Titans"},
+	{"tournament": 1449, "Map":"Nuke","CT":45,"T":55,"team":"The Titans"},
+	{"tournament": 1449, "Map":"Mirage","CT":51,"T":49,"team":"The Titans"},
+	{"tournament": 1449, "Map":"Inferno","CT":68,"T":32,"team":"The Titans"},
+	{"tournament": 1449, "Map":"CobStone","CT":48,"T":52,"team":"The Titans"},
+	{"tournament": 1449, "Map":"Cache","CT":38,"T":62,"team":"The Titans"},
+	{"tournament": 1449, "Map":"Overpass","CT":58,"T":42,"team":"The Titans"},
+	{"tournament": 1449, "Map":"Tuscan","CT":40,"T":60,"team":"The Titans"},
+	{"tournament": 1449, "Map":"Dust2","CT":34,"T":66,"team":"r4v"},
+	{"tournament": 1449, "Map":"Nuke","CT":55,"T":45,"team":"r4v"},
+	{"tournament": 1449, "Map":"Mirage","CT":31,"T":69,"team":"r4v"},
+	{"tournament": 1449, "Map":"Inferno","CT":58,"T":42,"team":"r4v"},
+	{"tournament": 1449, "Map":"CobStone","CT":58,"T":42,"team":"r4v"},
+	{"tournament": 1449, "Map":"Cache","CT":35,"T":65,"team":"r4v"},
+	{"tournament": 1449, "Map":"Overpass","CT":50,"T":50,"team":"r4v"},
+	{"tournament": 1449, "Map":"Tuscan","CT":30,"T":70,"team":"r4v"}
+]

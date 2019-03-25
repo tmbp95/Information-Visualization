@@ -1,0 +1,100 @@
+[
+	{
+		"key": "shox",
+		"tournament": 1449,
+		"values":[
+	     	{"axis": "Kills", "value": 80},
+	      	{"axis": "Deaths", "value": 40},
+	      	{"axis": "Losses", "value": 40},
+	      	{"axis": "Wins", "value": 90}
+	  	]
+	},{
+		"key": "bodyy",
+		"tournament": 1449,
+		"values":[
+	     	{"axis": "Kills", "value": 40},
+	      	{"axis": "Deaths", "value": 60},
+	      	{"axis": "Losses", "value": 34},
+	      	{"axis": "Wins", "value": 50}
+	  	]
+	},
+	{
+		"key": "NBK",
+		"tournament": 1449,
+		"values":[
+	     	{"axis": "Kills", "value": 30},
+	      	{"axis": "Deaths", "value": 40},
+	      	{"axis": "Losses", "value": 64},
+	      	{"axis": "Wins", "value": 30}
+	  	]
+	},
+	{
+		"key": "KannyS",
+		"tournament": 1449,
+		"values":[
+	     	{"axis": "Kills", "value": 70},
+	      	{"axis": "Deaths", "value": 60},
+	      	{"axis": "Losses", "value": 44},
+	      	{"axis": "Wins", "value": 20}
+	  	]
+	},
+	{
+		"key": "apex",
+		"tournament": 1449,
+		"values":[
+	     	{"axis": "Kills", "value": 30},
+	      	{"axis": "Deaths", "value": 40},
+	      	{"axis": "Losses", "value": 64},
+	      	{"axis": "Wins", "value": 80}
+	  	]
+	},
+	{
+		"key": "player1",
+		"tournament": 1449,
+		"values":[
+	     	{"axis": "Kills", "value": 80},
+	      	{"axis": "Deaths", "value": 40},
+	      	{"axis": "Losses", "value": 40},
+	      	{"axis": "Wins", "value": 90}
+	  	]
+	},{
+		"key": "player2",
+		"tournament": 1449,
+		"values":[
+	     	{"axis": "Kills", "value": 40},
+	      	{"axis": "Deaths", "value": 60},
+	      	{"axis": "Losses", "value": 34},
+	      	{"axis": "Wins", "value": 50}
+	  	]
+	},
+	{
+		"key": "player3",
+		"tournament": 1449,
+		"values":[
+	     	{"axis": "Kills", "value": 30},
+	      	{"axis": "Deaths", "value": 40},
+	      	{"axis": "Losses", "value": 64},
+	      	{"axis": "Wins", "value": 30}
+	  	]
+	},
+	{
+		"key": "player4",
+		"tournament": 1449,
+		"values":[
+	     	{"axis": "Kills", "value": 70},
+	      	{"axis": "Deaths", "value": 60},
+	      	{"axis": "Losses", "value": 44},
+	      	{"axis": "Wins", "value": 20}
+	  	]
+	},
+	{
+		"key": "player5",
+		"tournament": 1449,
+		"values":[
+	     	{"axis": "Kills", "value": 30},
+	      	{"axis": "Deaths", "value": 40},
+	      	{"axis": "Losses", "value": 64},
+	      	{"axis": "Wins", "value": 80}
+	  	]
+	}
+]

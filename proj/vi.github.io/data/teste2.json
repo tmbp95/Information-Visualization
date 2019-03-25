@@ -1,0 +1,21 @@
+[
+	{
+		"key": "The Titans",
+		"tournament": 1449,
+		"values":[
+	     	{"axis": "Kills", "value": 80},
+	      	{"axis": "Deaths", "value": 40},
+	      	{"axis": "Losses", "value": 40},
+	      	{"axis": "Wins", "value": 90}
+	  	]
+	},{
+		"key": "r4v",
+		"tournament": 1449,
+		"values":[
+	     	{"axis": "Kills", "value": 40},
+	      	{"axis": "Deaths", "value": 60},
+	      	{"axis": "Losses", "value": 34},
+	      	{"axis": "Wins", "value": 50}
+	  	]
+	}
+]
