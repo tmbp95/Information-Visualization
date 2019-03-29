@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<head>
+		<title>CS GO STATS</title>
+		<link href="css/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/checkbox.css">
+		<link rel="stylesheet" href="css/style.css">
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/d3v4.js"></script>
+		<link href="css/css/bootstrap-toggle.min.css" rel="stylesheet">
+		<script src="css/js/bootstrap-toggle.min.js"></script>
+  		<script src="js/jquery-ui.js"></script>
+		<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
+	</head>
+
+	<body>
+
+		<div id="central">
+			<div id="template_dir">
+				<br>
+				<img src="img/top2.png" width="50%" style="margin-bottom:10px;">
+				<div id="paineldir">
+					<div id="paineldir_box1">
+						<br>
+						<!--<div style="margin-left:20px;">
+							<input name="checkbox" data-toggle="toggle" data-on="Teams" data-off="Players" type="checkbox">
+						</div>-->
+						<div id="topPlayers">
+							<h4 style="margin-left:20px;margin-top:-4px;float:left">Tournaments by Year</h4>
+							<h4 style="margin-right:605px;margin-top:-4px;float:right;position:relative;">Calendar of Tournaments for <text class="yearlabel">2015</text></h4>
+							<div style="clear:both"></div>
+							<div id="scatterplot"></div>
+							<div style="float:left;width:500px;height:20px;margin-left:10px;margin-top:10px;">
+								<span style="float:left;margin-top:2px;" class="month-name">Less</span>
+								<div id="sampleColor" style="background: #eeeeee;"></div>
+								<div id="sampleColor" style="background: #71e7f4"></div>
+								<div id="sampleColor" style="background: #52a6af;"></div>
+								<div id="sampleColor" style="background: #41848b;"></div>
+								<div id="sampleColor" style="background: #2c6167;"></div>
+								<span style="margin-left:2px;" class="month-name">More</span>
+								<div class="input-group" style="margin-left:150px;margin-top:-23px;">
+							    	<input type="search" class="form-control autocompleteTournaments" placeholder="Search for a Tournament" id="autocomplete" style="height:25px;font-size:12px;width:200px;">							    	
+							    </div><!-- /input-group -->
+							</div>
+
+							<div id="calendar">
+								<div id="daysofweek">
+									<div id="eachweekday">S</div>
+									<div id="eachweekday">M</div>
+									<div id="eachweekday">T</div>
+									<div id="eachweekday">W</div>
+									<div id="eachweekday">T</div>
+									<div id="eachweekday">F</div>
+									<div id="eachweekday">S</div>
+								</div>
+							</div>
+
+						</div>	
+						<div style="clear:both"></div>
+						<div id="divInfoHeatmap">
+							<span id="InfoHeatmap"></span>
+						</div>	
+					</div>
+					<div id="paineldir_box1" class="bubblechartBOX" style="display:none;margin-top:5px;">
+						<br>
+						<div id="topPlayers">
+							<h4 style="margin-left:20px;margin-top:-4px;">Teams that played in - <font id="tournamentsfont"></font> - Tournament</h4>
+							<font style="margin-left:20px;margin-top:5px;float:left;">Search for a Team: </font>
+							<div class="input-group" style="margin-left:10px;margin-top:2px;width:180px;float:left;">
+							    <input type="search" class="form-control autocompleteTeams" placeholder="Search for a Team" id="autocomplete" style="height:25px;font-size:12px;width:180px;">
+							</div><!-- /input-group -->
+							<font style="margin-left:10px;margin-top:5px;float:left;">(or select one circle from the chart)</font>
+							<div style="clear:both;"></div>
+							<div id="infobubblechart">
+								<text style="font-size:1em;float:left;">Rank:</text>
+								<text style="font-size:1em;float:left;margin-left:10px;">1st</text><div style="width:15px;height:15px;border-radius:10px;background-color:#41848b;float:left;margin-left:5px;"></div>
+								<text style="font-size:1em;float:left;margin-left:5px;">2nd</text><div style="width:15px;height:15px;border-radius:10px;background-color:#52a6af;float:left;margin-left:5px;"></div>
+								<text style="font-size:1em;float:left;margin-left:5px;">3rd</text><div style="width:15px;height:15px;border-radius:10px;background-color:#71e7f4;float:left;margin-left:5px;"></div>
+								<text style="font-size:1em;float:left;margin-left:5px;">Other</text><div style="width:15px;height:15px;border-radius:10px;background-color:black;float:left;margin-left:5px;"></div>
+								<text style="font-size:1em;float:left;margin-left:15px;">Prize: </text>
+								<div style="width:5px;height:5px;border-radius:2.5px;background-color:#52a6af;float:left;margin-left:5px;position:relative;top:7.5px;"></div>
+								<div style="width:10px;height:10px;border-radius:5px;background-color:#52a6af;float:left;margin-left:5px;position:relative;top:5px;"></div>
+								<div style="width:15px;height:15px;border-radius:10px;background-color:#52a6af;float:left;margin-left:5px;position:relative;top:2.0px;"></div>
+								<text style="font-size:1em;float:left;margin-left:5px;">(size of the ball)</text>
+							</div>
+							<div style="clear:both;"></div>
+							<div id="bubblechart">
+								<input type="hidden" id="nameofteam">
+							</div>
+							<div id="radarchart2">
+								<label style="font-size:1.0em;position:relative;top:-18px;width:105px;left:50%;margin-left:-52.5px;">Stats for Team <br></label>
+								<label style="font-size:1.0em;position:relative;" class="Teamlabel"></label>
+								<div id="radarchart">
+									
+								</div>
+								<div id="togglesradar">
+
+									<label style="font-size:14px;font-weight: normal;width:105px;position:relative;left:50%;margin-left:-52.5px;">- Showing Axis -</label>
+									<table>
+										<tr>
+											<td style="width:50px;">Kills</td>
+											<td style="width:50px;">
+												<label class="switch">
+													<input type="checkbox" id="killsinput" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+											<td style="width:50px;">Deaths</td>
+											<td>
+												<label class="switch">
+													<input type="checkbox"  id="deathsinput" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+										</tr>
+										<tr>
+											<td>Losses</td>
+											<td>
+												<label class="switch">
+													<input type="checkbox"  id="lossesinput" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+											<td>Wins</td>
+											<td>
+												<label class="switch">
+													<input type="checkbox"  id="winsinput" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+										</tr>
+									</table>
+									<br>
+								</div>
+								<div style="clear:both"></div>
+							</div>
+							<label style="font-size:1.0em;position:relative;top:-18px;margin-left:46px;">Maps (Sides Win Percentage)</label>
+							
+							<div id="barchartBox">
+								<div id="legendas">
+									<div id="legenda1">Team 1</div>
+									<div id="legenda2">Team 2</div>
+								</div>
+
+								<div id="barchart"></div>
+								<div id="mapsSelection">
+									<div id="imagemMap">
+										<img src="img/dust2.PNG" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox1" checked/>
+								            	<label for="checkbox1"><text style="position:relative;left:-10px;">Dust2</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/nuke.PNG" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox2" checked/>
+								            	<label for="checkbox2"><text style="position:relative;left:-10px;">Nuke</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/mirage.PNG" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox3" checked/>
+								            	<label for="checkbox3"><text style="position:relative;left:-10px;">Mirage</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/inferno.PNG" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox4"/>
+								            	<label for="checkbox4"><text style="position:relative;left:-10px;">Inferno</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/cobblestone.PNG" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox5"/>
+								            	<label for="checkbox5"><text style="position:relative;left:-10px;">Cobble</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/cache.PNG" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox6"/>
+								            	<label for="checkbox6"><text style="position:relative;left:-10px;">Cache</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/overpass.PNG" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox7"/>
+								            	<label for="checkbox7"><text style="position:relative;left:-10px;">OverPass</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/tuscan.PNG" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox8"/>
+								            	<label for="checkbox8"><text style="position:relative;left:-10px;">Tuscan</text></label>
+								       		</div>
+								       	</div>
+									</div>
+									<div id="imagemMap">
+										<img src="img/train.png" style="width:80px;height:50px;"/>
+										<div class="funkyradio">
+											<div class="funkyradio-info">
+								            	<input type="checkbox" name="checkbox" id="checkbox9"/>
+								            	<label for="checkbox9"><text style="position:relative;left:-10px;">Train</text></label>
+								       		</div>
+								       	</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div style="clear:both"></div>
+					</div>
+					<div id="paineldir_box1" class="barcharttBOX" style="display:none;margin-top:5px;">
+						<br>
+						<div id="topPlayers">
+							<h4 style="margin-left:20px;margin-top:-4px;float:left;">Players in - <font id="teamsfont"></font> - Team</h4>
+							<div class="input-group" style="margin-right:20px;margin-top:-5px;width:350px;float:right;">
+							    <input type="search" class="form-control autocompletePlayers" placeholder="Search for a Player" id="autocomplete" style="height:25px;font-size:12px;width:180px;float:right;">
+								<font style="margin-right:10px;margin-top:2px;float:right;">Search for a Player: </font>
+							</div><!-- /input-group -->
+							<div style="clear:both"></div>
+							<div id="horizbarchart">
+								<input type="hidden" id="nameofplayer">
+							</div>
+							<div id="radarchart2" style="width:275px;">
+								<label style="font-size:1.0em;position:relative;top:-5px;width:108px;left:50%;margin-left:-54px;">Stats for Player <br></label>
+								<label style="font-size:1.0em;position:relative;top:9px;" class="Playerlabel"></label>
+								<div id="radarchartPlayers">
+									
+								</div>
+								<div id="togglesradar">
+									<label style="font-size:14px;font-weight: normal;width:105px;position:relative;left:50%;margin-left:-52.5px;">- Showing Axis -</label>
+									<table>
+										<tr>
+											<td style="width:50px;">Kills</td>
+											<td style="width:50px;">
+												<label class="switch">
+													<input type="checkbox" id="killsinput2" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+											<td style="width:50px;">Deaths</td>
+											<td>
+												<label class="switch">
+													<input type="checkbox"  id="deathsinput2" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+										</tr>
+										<tr>
+											<td>Losses</td>
+											<td>
+												<label class="switch">
+													<input type="checkbox"  id="lossesinput2" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+											<td>Wins</td>
+											<td>
+												<label class="switch">
+													<input type="checkbox"  id="winsinput2" checked>
+													<span class="slider round"></span>
+												</label>
+											</td>
+										</tr>
+									</table>
+									<br>
+								</div>
+								<div style="clear:both"></div>
+							</div>
+							<label style="font-size:1.0em;position:relative;top:-5px;margin-left:66px;">Rating Variation</label>
+							<div id="linechart"></div>
+						</div>
+						<div style="clear:both"></div>
+					</div>
+					<br>
+				</div>
+			</div>
+		</div>
+		<input class="dataInput" type="hidden" value="">
+		<!--<script src="https://cdn.jsdelivr.net/alasql/0.3/alasql.min.js"></script>
+		<script src="js/runscript4.js"></script>-->
+		<script src="js/d3-scale-chromatic.v1.min.js"></script>
+		<script src="js/heatmap.js"></script>
+		<script src="js/d3-tip.js"></script>
+		<script src="js/scatterplot.js"></script>
+		<script src="js/bubblechart.js"></script>
+		<script src="js/radarchart.js"></script>
+		<script src="js/barchart.js"></script>
+		<script src="js/horizbarchart.js"></script>
+		<script src="js/radarchartPlayers.js"></script>
+		<script src="js/linechart.js"></script>
+		<script>
+
+				var availableEvents = [];
+				d3.json("data/AllEventsNames.json", function(data){
+                   data.forEach(function(d) {
+          				availableEvents.push(d.Name);
+      				});
+					$('.autocompleteTournaments').autocomplete({
+						lookup: availableEvents,
+						onSelect: function (suggestion) {
+							updateSearchBar(suggestion,data);
+						}
+					});
+					function updateSearchBar(suggestion,data) {
+				    	data.forEach(function(d) {
+          					if(suggestion.value == d.Name){
+          						begin=false;
+          						enterOutside=true;
+          						clickedDot=d.YEAR;
+          						gen_scatterplot(clickedDot);
+          						updateData(clickedDot,d.ID);
+          						$(".yearlabel").html(clickedDot);
+          						$("#ESTE").css("fill", "#ccc");        						
+          						teste(d.ID,d.Name);
+          					}
+      					});
+					}
+			    });
+			    $(document).ready(function() {
+					$('.autocompleteTournaments').val("");
+			    });
+
+			    
+			    function waitForElement(){
+			    	var teamsInTournament = JSON.parse($(".dataInput").val());
+				    if(teamsInTournament!=null){
+				    	var availableTeams = [];
+						
+		                   teamsInTournament.forEach(function(d) {
+		          				availableTeams.push(d.NAME);
+		      				});
+							$('.autocompleteTeams').autocomplete({
+								lookup: availableTeams,
+								onSelect: function (suggestion) {
+									updateSearchBarTeams(suggestion,teamsInTournament);
+								}
+							});
+				    }else{
+				        setTimeout(waitForElement, 250);
+				    }
+				}
+				waitForElement();
+
+				function updateSearchBarTeams(suggestion,data){
+					data.forEach(function(d) {
+          				if(suggestion.value == d.NAME){
+          					gen_bubblechart(idTournament, d.NAME);
+          					setTimeout(function(){
+          						dispatch4.call("BallClick", d, d);
+          						gen_radarchart(idTournament);
+    							gen_barchart(idTournament);
+    							$(".Teamlabel").html(d.NAME);
+		                        var widthBox = parseFloat($(".Teamlabel").css("width"));
+		                        $(".Teamlabel").css("left", "30%");
+		                        $(".Teamlabel").css("margin-left", -(widthBox/2));
+		                        $("#legenda1").html(d.NAME.substring(0,10));
+		                        $("#nameofteam").val(d.NAME);
+          					},100) 	
+          				}
+      				});
+				}
+
+
+			    $(document).ready(function() {
+					$('.autocompleteTeams').val("");
+			    });
+
+				 function waitForElement2(){
+			    	var name = $("#nameofteam").val();
+				    if(name!=null && idTournament!=null){
+				    	var availablePlayers = [];
+						d3.json("data/teste4.json", function(data){
+						    var vectorData = [];
+						    for(i=0;i<data.length;i++){
+						      if(data[i].team == name && data[i].tournament == idTournament){
+						        vectorData.push(data[i]);
+						      }
+						    }
+						    data = vectorData;
+		                   data.forEach(function(d) {
+		          				availablePlayers.push(d.name);
+		      				});
+							$('.autocompletePlayers').autocomplete({
+								lookup: availablePlayers,
+								onSelect: function (suggestion) {
+									updateSearchBarPlayers(suggestion, data);
+								}
+							});
+			    	});
+				    }else{
+				        setTimeout(waitForElement2, 250);
+				    }
+				}
+				waitForElement2();
+
+				function updateSearchBarPlayers(suggestion,data){
+					data.forEach(function(d) {
+          				if(suggestion.value == d.name){
+          					gen_horizbarchart(d.team,idTournament);
+          					setTimeout(function(){
+          						dispatch9.call("BarClick", d, d);
+          						$(".Playerlabel").html(d.name);
+				                var widthBox = parseFloat($(".Playerlabel").css("width"));
+				                $(".Playerlabel").css("left", "29%");
+				                $(".Playerlabel").css("margin-left", -(widthBox/2));
+				                $("#nameofplayer").val(d.name);
+				                gen_radarchartPlayers(idTournament); 
+				                gen_linechart(d.name);
+          					},100) 	
+          				}
+      				});
+				}
+
+			    $(document).ready(function() {
+					$('.autocompletePlayers').val("");
+			    });
+		</script>
+</body>
+
+</html>
